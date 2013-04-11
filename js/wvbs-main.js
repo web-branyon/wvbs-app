@@ -20,6 +20,7 @@
   var selectedVideoEntry = "";
   var entriesAlbum = [];
   var selectedAlbumEntry = "";
+  var entriesYTAlbum = [];
   var moreRSSurl = "";
   var currentEntries = 0;
   var json = "";
@@ -554,8 +555,8 @@ $(".albumLink").live("click", function() {
 	selectedAlbumEntry = $(this).data("entryid");
 });
 /******************YOUTUBE DATA***************/
-function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
-  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function")
+function youtubeAlbumJSON(youtubeJSONurl,render) {
+  if (render)
   {
 	  $.mobile.showPageLoadingMsg("a","Loading...");
   }
@@ -572,7 +573,7 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 		dataType: "jsonp",
 		contentType: "application/json",
 		success: function(data) {
-			entriesAlbum = [];
+			entriesYTAlbum = [];
 			$.each(data.data.items, function(i, album) {
 			  if (i <= numEntries) {
 				var dateFull = album.updated;
@@ -586,35 +587,35 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 					description:$.trim(album.description),
 					//thumbnail:$(v).find("thumbnail").text()
 				};
-				entriesAlbum.push(entry);
+				entriesYTAlbum.push(entry);
 				++i;
 			  }
 			});
-			entriesAlbum = sortByKey(entriesAlbum,'date');
+			entriesYTAlbum = sortByKey(entriesYTAlbum,'date');
 			//store entries
-			localStorage["entriesAlbum"] = JSON.stringify(entriesAlbum);
-			  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
-				  renderYTAlbumEntries(entriesAlbum);
+			localStorage["entriesYTAlbum"] = JSON.stringify(entriesYTAlbum);
+			  if (render) {
+				  renderYTAlbumEntries(entriesYTAlbum);
 				  $("#albumArchiveStatus").html("");
 			  }
 			  else
 			  {
-				  var webUpdated = new Date(entriesAlbum[0].date);
+				  var webUpdated = new Date(entriesYTAlbum[0].date);
 				  var isNewer = appUpdated(webUpdated.toLocaleDateString());
 				  if (isNewer){ }
 				  else { $('#ytAlbumListLink').prepend('<span class="new-badge"></span>'); }
 			  }
-			//renderYTAlbumEntries(entriesAlbum);
-			//$("#albumArchiveStatus").html("");
+			renderYTAlbumEntries(entriesYTAlbum);
+			$("#ytAlbumArchiveStatus").html("");
 		},
 		error:function(jqXHR,status,error) {
 			//try to use cache
-			if(localStorage["entriesAlbum"]) {
+			if(localStorage["entriesYTAlbum"]) {
 				$("#albumArchiveStatus").html("Using cached version...");
-				entriesAlbum = JSON.parse(localStorage["entriesAlbum"])
-				//renderYTAlbumEntries(entriesAlbum);				
-			  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
-				  renderYTAlbumEntries(entriesAlbum);
+				entriesYTAlbum = JSON.parse(localStorage["entriesYTAlbum"])
+				//renderYTAlbumEntries(entriesYTAlbum);				
+			  if (render) {
+				  renderYTAlbumEntries(entriesYTAlbum);
 				  $("#albumArchiveStatus").html("");
 			  }
 			} else {
@@ -623,17 +624,17 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 		}
 	});
 }
-function renderYTAlbumEntries(entriesAlbum) {
-    entries = entriesAlbum;
+function renderYTAlbumEntries(entriesYTAlbum) {
+    entries = entriesYTAlbum;
 	console.log("renderYTAlbumEntries entered");
     var s = '';
-    $.each(entriesAlbum, function(i, v) {
+    $.each(entriesYTAlbum, function(i, v) {
         s += '<li><a class="albumLink" href="#" onclick="javascript:youtubeVideoJSON(\'https://gdata.youtube.com/feeds/api/playlists/' + v.id + '?v=2&alt=jsonc&max-results=50\'); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
     });
-    $("#archiveAlbumsList").html(s);
-	window.location.hash = '#albumArchive';
-    $("#archiveAlbumsList").listview("refresh");
-	$.mobile.hidePageLoadingMsg();
+    $("#ytArchiveAlbumsList").html(s);
+//	window.location.hash = '#ytAlbumArchive';
+	$("#ytArchiveAlbumsList").listview("refresh");
+//	$.mobile.hidePageLoadingMsg();
 }
 function sortByKey(array, key) {
     return array.sort(function(a, b) {

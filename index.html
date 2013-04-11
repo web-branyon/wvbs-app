@@ -294,7 +294,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
             <ul id="weblinksList" data-role="listview" data-inset="true" data-theme="d">
               <li data-theme="c"><a id="webSiteListLink" href="#webSitesArchive" style="padding:20px 85px;"><img src="images/internet-globe.png" width="60" />Video Websites by WVBS</a></li>
               <li data-theme="c"><a href="#" id="vimeoAlbumListLink" onclick="javascript:vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries); return false;" style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
-			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript:youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc',renderYTAlbumEntries); return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
+			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript: window.location.hash = '#ytAlbumArchive'; return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
             </ul>
         </div>
 
@@ -402,11 +402,6 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
 
   <div data-role="page" id="albumArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
-	  <script>
-		$("#albumArchive").live("pageinit", function() {
-			//vimeoAlbumJSON(' ','50');
-		});
-      </script>
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1>WVBS Video Album Archive</h1>
@@ -433,11 +428,6 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
     
     <div data-role="page" id="videoArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
-	  <script>
-		$("#videoArchive").live("pageinit", function() {
-			//vimeoVideoJSON(' ','50');
-		});
-      </script>
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1>WVBS Video Archive</h1>
@@ -462,6 +452,73 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         </div><!-- /navbar -->
       </div>
   </div>
+
+<!-- BEGINNING OF NEW PAGE -->
+
+  <div data-role="page" id="ytAlbumArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
+	  <script>
+		$("#ytAlbumArchive").live("pageinit", function() {
+			//vimeoAlbumJSON(' ','50');
+		});
+      </script>
+      <div data-role="header" data-position="fixed">
+          <a href="#mainPage" data-rel="back">Back</a>
+          <h1>WVBS Video Album Archive</h1>
+         <div data-role="controlgroup" data-type="horizontal" style="top:0px;position:absolute;float:right;z-index:10;display:inline;" align="right" class="ui-btn-right"> 
+          <a href="javascript:onMenuShow();" data-role="button" data-icon="info">Menu</a> 
+          <a href="#mainPage" data-role="button" data-icon="home">Home</a> 
+        </div>
+      </div>
+  
+      <div class="content" data-role="content">
+        <ul id="ytArchiveAlbumsList" data-role="listview" data-filter="true" data-inset="true" data-divider-theme="c" data-theme="d" data-count-theme="e"></ul>
+		<div id="ytAlbumArchiveStatus" class="status" style="padding-bottom:10px;" ></div>  
+      </div>
+  
+      <div id="ytAlbumArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
+        <div data-role="navbar" data-iconpos="top" data-theme="c" >
+            <ul>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
+            </ul>
+        </div><!-- /navbar -->
+      </div>
+  </div>
+    
+    <div data-role="page" id="ytVideoArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
+	  <script>
+		$("#ytVideoArchive").live("pageinit", function() {
+			//vimeoVideoJSON(' ','50');
+		});
+      </script>
+      <div data-role="header" data-position="fixed">
+          <a href="#mainPage" data-rel="back">Back</a>
+          <h1>WVBS Video Archive</h1>
+         <div data-role="controlgroup" data-type="horizontal" style="top:0px;position:absolute;float:right;z-index:10;display:inline;" align="right" class="ui-btn-right"> 
+          <a href="javascript:onMenuShow();" data-role="button" data-icon="info">Menu</a> 
+          <a href="index.html" data-ajax='false' data-role="button" data-icon="home">Home</a> 
+        </div>
+      </div>
+  
+      <div class="content" data-role="content">
+        <ul id="ytArchiveVideosList" data-role="listview" data-filter="true" data-inset="true" data-divider-theme="c" data-theme="d" data-count-theme="e"></ul>
+		<div id="ytVideoArchiveStatus" class="status" style="padding-bottom:10px;" ></div>  
+      </div>
+  
+      <div id="ytVideoArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
+        <div data-role="navbar" data-iconpos="top" data-theme="c" >
+            <ul>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
+            </ul>
+        </div><!-- /navbar -->
+      </div>
+  </div>
+
+<!-- END OF NEW PAGE -->
+
   <div data-role="page" id="videoPlayerPage" class="bground" data-title="WVBS Online Videos">
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
