@@ -555,8 +555,8 @@ $(".albumLink").live("click", function() {
 	selectedAlbumEntry = $(this).data("entryid");
 });
 /******************YOUTUBE DATA***************/
-function youtubeAlbumJSON(youtubeJSONurl,render) {
-  if (render)
+function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
+  if (renderYTAlbumEntries)
   {
 	  $.mobile.showPageLoadingMsg("a","Loading...");
   }
@@ -594,7 +594,7 @@ function youtubeAlbumJSON(youtubeJSONurl,render) {
 			entriesYTAlbum = sortByKey(entriesYTAlbum,'date');
 			//store entries
 			localStorage["entriesYTAlbum"] = JSON.stringify(entriesYTAlbum);
-			  if (render) {
+			  if (renderYTAlbumEntries) {
 				  renderYTAlbumEntries(entriesYTAlbum);
 				  $("#albumArchiveStatus").html("");
 			  }
@@ -614,7 +614,7 @@ function youtubeAlbumJSON(youtubeJSONurl,render) {
 				$("#albumArchiveStatus").html("Using cached version...");
 				entriesYTAlbum = JSON.parse(localStorage["entriesYTAlbum"])
 				//renderYTAlbumEntries(entriesYTAlbum);				
-			  if (render) {
+			  if (renderYTAlbumEntries) {
 				  renderYTAlbumEntries(entriesYTAlbum);
 				  $("#albumArchiveStatus").html("");
 			  }
@@ -633,6 +633,7 @@ function renderYTAlbumEntries(entriesYTAlbum) {
     });
     $("#ytArchiveAlbumsList").html(s);
 //	window.location.hash = '#ytAlbumArchive';
+	$.mobile.changePage($("#ytAlbumArchive"));
 	$("#ytArchiveAlbumsList").listview("refresh");
 //	$.mobile.hidePageLoadingMsg();
 }
@@ -713,7 +714,8 @@ function renderYTEntries(entriesVideo) {
         s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
     });
     $("#archiveVideosList").html(s);
-	window.location.hash = '#videoArchive';
+	//window.location.hash = '#videoArchive';
+	$.mobile.changePage("videoArchive");
     $("#archiveVideosList").listview("refresh");
 	$.mobile.hidePageLoadingMsg();
 }
