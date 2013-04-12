@@ -971,6 +971,9 @@ $("#videoPlayerPage").live("pageshow", function(prepage) {
 $("#webSitesArchive").live("pageshow", function(prepage) {
 	webSites(renderWebEntries);
 });
+$("#albumArchive").live("pageshow", function(prepage) {
+	vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries);
+});
 
 function getCurrentDate() {
   var currentDate = new Date();
