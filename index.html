@@ -95,7 +95,7 @@
 	  // At this point, the document has loaded but cordova-1.7.0.js has not. When Cordova is loaded and talking with the native device, it will call the event `deviceready`.
 	  function onLoad() {
 		  document.addEventListener("deviceready", onDeviceReady, false);
-		  //$( document ).bind( "pagebeforeload", function(){ $("[data-role=footer]").style.display = "none"; }, false);
+		  $( document ).bind( "pagebeforeload", function(){ $("[data-role=footer]").style.display = "none"; }, false);
 	  }
 	  // Cordova is loaded and it is now safe to make calls Cordova methods
 	  function onDeviceReady() {
@@ -202,8 +202,8 @@
 	  else {
 		  localStorage.latestAccess = getCurrentDate();
 	  }
-	  webSites(renderWebEntries);
-	  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries);
+	  webSites();
+	  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
 	  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
 	  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9');
 	  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9');
@@ -298,7 +298,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
             <h3>WVBS Online Resources</h3>
             <ul id="weblinksList" data-role="listview" data-inset="true" data-theme="d">
               <li data-theme="c"><a id="webSiteListLink" href="#webSitesArchive" style="padding:20px 85px;"><img src="images/internet-globe.png" width="60" />Video Websites by WVBS</a></li>
-              <li data-theme="c"><a href="vimeo-albums.html" data-prefetch="true" id="vimeoAlbumListLink"  style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
+              <li data-theme="c"><a href="#" id="vimeoAlbumListLink" onclick="javascript:vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries); return false;" style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
 			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript:youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc',renderYTAlbumEntries); return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
             </ul>
         </div>
@@ -406,7 +406,6 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       </div>
   </div>
 
-<!--
   <div data-role="page" id="albumArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
@@ -458,7 +457,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         </div>
       </div>
   </div>
--->
+
 <!-- BEGINNING OF NEW PAGE -->
 
   <div data-role="page" id="ytAlbumArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">

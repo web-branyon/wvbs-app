@@ -12,6 +12,10 @@
 /*from: http://stackoverflow.com/questions/5953753/flickering-when-navigating-between-pages
 END of flickering fix*/
 
+.ui-page 
+{
+	min-width:300px;
+}
 .ui-li-has-count .ui-li-count {
 font-size: 12px;
 }

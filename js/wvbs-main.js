@@ -181,7 +181,7 @@ function renderNewsEntries(entriesNews) {
 function webSites(renderWebEntries) //use to be webSites()
 {
   if (renderWebEntries && typeof(renderWebEntries) === "function") {
-	  //$.mobile.showPageLoadingMsg("a","Loading...");
+	  $.mobile.showPageLoadingMsg("a","Loading...");
   }
 	  //Set the title
 	  $("h1", this).text(TITLE);
@@ -242,9 +242,9 @@ function renderWebEntries(entriesWeb) {
        //s += '<li><a href="#WVBS-Feed" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="50" height="50" />' + v.title + '</a></li>';
     });
     $("#webSitesArchiveList").html(s);
-	//window.location.hash = '#webSitesArchive';
+	window.location.hash = '#webSitesArchive';
     $("#webSitesArchiveList").listview("refresh");
-   // $.mobile.hidePageLoadingMsg();    
+    $.mobile.hidePageLoadingMsg();    
 }
 function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 	if (renderFBpageEntries && typeof(renderFBpageEntries) === "function")
@@ -472,7 +472,7 @@ function moreWVBSEntries(addEntries) {
 }
 function vimeoAlbumJSON(vimeoXMLurl,numEntries,renderVimeoAlbumEntries) {
   if (renderVimeoAlbumEntries && typeof(renderVimeoAlbumEntries) === "function") {
-	  //$.mobile.showPageLoadingMsg("a","Loading...");
+	  $.mobile.showPageLoadingMsg("a","Loading...");
   }
 	if (typeof numEntries == 'undefined' ) numEntries = 6;
 	moreRSSurl = vimeoXMLurl;
@@ -545,9 +545,9 @@ function renderVimeoAlbumEntries(entriesAlbum) {
         s += '<li><a class="albumLink" href="#" onclick="javascript:vimeoVideoJSON(\'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\\\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Falbum%2F' + v.id + '%2Fvideos.xml\\\'&format=json\',\'50\'); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
     });
     $("#archiveAlbumsList").html(s);
-	//window.location.hash = '#albumArchive';
+	window.location.hash = '#albumArchive';
     $("#archiveAlbumsList").listview("refresh");
-	//$.mobile.hidePageLoadingMsg();
+	$.mobile.hidePageLoadingMsg();
 }
 $(".albumLink").live("click", function() {
 	entries = entriesAlbum;
@@ -556,7 +556,7 @@ $(".albumLink").live("click", function() {
 });
 /******************YOUTUBE DATA***************/
 function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
-  if (renderYTAlbumEntries)
+  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function")
   {
 	  $.mobile.showPageLoadingMsg("a","Loading...");
   }
@@ -594,7 +594,7 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 			entriesYTAlbum = sortByKey(entriesYTAlbum,'date');
 			//store entries
 			localStorage["entriesYTAlbum"] = JSON.stringify(entriesYTAlbum);
-			  if (renderYTAlbumEntries) {
+			  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
 				  renderYTAlbumEntries(entriesYTAlbum);
 				  $("#albumArchiveStatus").html("");
 			  }
@@ -614,7 +614,7 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 				$("#albumArchiveStatus").html("Using cached version...");
 				entriesYTAlbum = JSON.parse(localStorage["entriesYTAlbum"])
 				//renderYTAlbumEntries(entriesYTAlbum);				
-			  if (renderYTAlbumEntries) {
+			  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
 				  renderYTAlbumEntries(entriesYTAlbum);
 				  $("#albumArchiveStatus").html("");
 			  }
@@ -632,10 +632,10 @@ function renderYTAlbumEntries(entriesYTAlbum) {
         s += '<li><a class="albumLink" href="#" onclick="javascript:youtubeVideoJSON(\'https://gdata.youtube.com/feeds/api/playlists/' + v.id + '?v=2&alt=jsonc&max-results=50\'); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
     });
     $("#ytArchiveAlbumsList").html(s);
-//	window.location.hash = '#ytAlbumArchive';
-	$.mobile.changePage($("#ytAlbumArchive"));
+	window.location.hash = '#ytAlbumArchive';
+
 	$("#ytArchiveAlbumsList").listview("refresh");
-//	$.mobile.hidePageLoadingMsg();
+	$.mobile.hidePageLoadingMsg();
 }
 function sortByKey(array, key) {
     return array.sort(function(a, b) {
@@ -714,8 +714,7 @@ function renderYTEntries(entriesVideo) {
         s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
     });
     $("#archiveVideosList").html(s);
-	//window.location.hash = '#videoArchive';
-	$.mobile.changePage("videoArchive");
+	window.location.hash = '#videoArchive';
     $("#archiveVideosList").listview("refresh");
 	$.mobile.hidePageLoadingMsg();
 }
@@ -970,9 +969,6 @@ $("#videoPlayerPage").live("pageshow", function(prepage) {
 });
 $("#webSitesArchive").live("pageshow", function(prepage) {
 	webSites(renderWebEntries);
-});
-$("#albumArchive").live("pageshow", function(prepage) {
-	vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries);
 });
 
 function getCurrentDate() {
