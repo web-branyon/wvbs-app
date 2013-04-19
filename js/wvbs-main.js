@@ -8,10 +8,18 @@
 //Stores entries
   var entries = [];
   var selectedEntry = "";
-  var entriesFBnotes = [];
-  var selectedFBnotesEntry = "";
+  //var entriesFBnotes = [];
+  //var selectedFBnotesEntry = "";
   var entriesFBpage = [];
   var selectedFBpageEntry = "";
+
+  var wvbsFBentries = [];
+  var selectedWVBSFBpageEntry = "";
+  var sftFBentries = [];
+  var selectedSFTFBpageEntry = "";
+  var boundFBentries = [];
+  var selectedBoundFBpageEntry = "";
+
   var entriesWeb = [];
   var selectedWebEntry = "";
   var entriesWVBS = [];
@@ -206,7 +214,8 @@ function webSites(renderWebEntries) //use to be webSites()
 			  localStorage["entriesWeb"] = JSON.stringify(entriesWeb);
 			  //
 			  if (renderWebEntries && typeof(renderWebEntries) === "function") {
-				  renderWebEntries(entriesWeb);
+				  //renderWebEntries(entriesWeb);
+				  renderWebEntries();
 			  }
 			  else
 			  {
@@ -217,30 +226,28 @@ function webSites(renderWebEntries) //use to be webSites()
 			  }
 		  },
 		  error:function(jqXHR,status,error) {
-			if(status == 'timeout')
-				alert("connection timed-out, try again or check your internet connection.");
+			if(status == 'timeout') alert("connection timed-out, try again or check your internet connection.");
 			//try to use cache
-			  if(localStorage["entriesWeb"]) {
-				  $("#webSitesArchiveStatus").html("Using cached version...");
-				  //$("#webSitesArchiveStatus").style.visibility = "visible";
-				  entriesWeb = JSON.parse(localStorage["entriesWeb"])
-				  if (renderWebEntries && typeof(renderWebEntries) === "function") {
-					  renderWebEntries(entriesWeb);
-				  }				
-			  } else {
-				  $("#webSitesArchiveStatus").html("Sorry, we are unable to get the website list and there is no cache.");
-			  }
+			if (renderWebEntries && typeof(renderWebEntries) === "function") {
+				//renderWebEntries(entriesWeb);
+				renderWebEntries();
+			}				
 		  }
 	  }); 
 }
-function renderWebEntries(entriesWeb) {
-    entries = entriesWeb;
-    var s = '';
-	s += '<li data-role="list-divider" data-theme="b">Specific Video Websites</li>';
-    $.each(entriesWeb, function(i, v) {
-        s += '<li><a href="' + v.link + '" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="100" style="padding: 10px 0px;" /><h3>' + v.title + '</h3><p style="text-decoration:underline;"><strong>' + v.link + '</strong></p></a></li>';
-       //s += '<li><a href="#WVBS-Feed" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="50" height="50" />' + v.title + '</a></li>';
-    });
+function renderWebEntries() {
+	if(localStorage["entriesWeb"]) {
+		entriesWeb = JSON.parse(localStorage["entriesWeb"])
+		entries = entriesWeb;
+		var s = '';
+		s += '<li data-role="list-divider" data-theme="b">Specific Video Websites</li>';
+		$.each(entriesWeb, function(i, v) {
+			s += '<li><a href="' + v.link + '" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="100" style="padding: 10px 0px;" /><h3>' + v.title + '</h3><p style="text-decoration:underline;"><strong>' + v.link + '</strong></p></a></li>';
+		   //s += '<li><a href="#WVBS-Feed" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="50" height="50" />' + v.title + '</a></li>';
+		});
+	} else {
+		$("#webSitesArchiveStatus").html("Sorry, we are unable to get the website list and there is no cache.");
+	}
     $("#webSitesArchiveList").html(s);
 	window.location.hash = '#webSitesArchive';
     $("#webSitesArchiveList").listview("refresh");
@@ -261,22 +268,8 @@ function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 		  url: fbPageRSSurl,
 		  dataType: "jsonp",
           contentType: "application/json",
-		  beforeSend: function() { },		  
           success: function(data) {
 			currentEntries = parseInt(data.query.count);
-			var activeFBtag;
-			if (fbPageRSSurl.search('273296449735') > 0){
-				var wvbsFBCount = data.query.count;
-				activeFBtag = '#wvbsFBListLink';
-			}
-			else if (fbPageRSSurl.search('273848047478') > 0){
-				var sftFBCount = data.query.count;
-				activeFBtag = '#sftFBListLink';
-			}
-			else if (fbPageRSSurl.search('312760610126') > 0){
-				var boundFBCount = data.query.count;
-				activeFBtag = '#boundFBListLink';
-			}
   			  entriesFBpage = [];
 			  var pubdate = new Date();
 			  $.each(data.query.results.item, function(i, item) {
@@ -298,10 +291,26 @@ function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 				  }
 			  });
 			  entriesFBpage = sortByKey(entriesFBpage,'dateCode');
+			  var activeFBtag;
+			  if (fbPageRSSurl.search('273296449735') > 0){
+				  var wvbsFBCount = data.query.count;
+				  activeFBtag = '#wvbsFBListLink';
+				  localStorage["wvbsFBentries"] = JSON.stringify(entriesFBpage);
+			  }
+			  else if (fbPageRSSurl.search('273848047478') > 0){
+				  var sftFBCount = data.query.count;
+				  activeFBtag = '#sftFBListLink';
+				  localStorage["sftFBentries"] = JSON.stringify(entriesFBpage);
+			  }
+			  else if (fbPageRSSurl.search('312760610126') > 0){
+				  var boundFBCount = data.query.count;
+				  activeFBtag = '#boundFBListLink';
+				  localStorage["boundFBentries"] = JSON.stringify(entriesFBpage);
+			  }
 			  //store entries
-			  localStorage["entriesFBpage"] = JSON.stringify(entriesFBpage);
 			  if (renderFBpageEntries && typeof(renderFBpageEntries) === "function") {
-				  renderFBpageEntries(entriesFBpage);
+				  //renderFBpageEntries(entriesFBpage);
+				  renderFBpageEntries();
 				  $("#FacebookFeedStatus").html("");
 			  }
 			  else
@@ -313,38 +322,37 @@ function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 			  }
 		  },
 		  error:function(jqXHR,status,error) {
-			  //try to use cache
-			  if(localStorage["entriesFBpage"]) {
-				  $("#FacebookFeedStatus").html("Using cached version...");
-				  entriesFBpage = JSON.parse(localStorage["entriesFBpage"])
-				  if (renderFBpageEntries && typeof(renderFBpageEntries) === "function") {
-					  renderFBpageEntries(entriesFBpage);
-					  $("#FacebookFeedStatus").html("");
-				  }
-			  } else {
-				  $("#FacebookFeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
-			  }
+			if(status == 'timeout') alert("connection timed-out, try again or check your internet connection.");
+			//try to use cache
+			if (renderFBpageEntries && typeof(renderFBpageEntries) === "function") {
+				//renderFBpageEntries(entriesFBpage);
+				renderFBpageEntries();
+			}
 		  },
 	  });
 }
-function renderFBpageEntries(entriesFBpage) {
-    //entries = entriesFBpage;
-	var s = '';
-    $.each(entriesFBpage, function(i, v) {
-        s += '<li><a href="#contentPage" class="fbPageLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')" ;><h3>' + v.title + '</h3><p>posted: <strong>' + v.dateString + '</strong></p></a></li>';
-    });
-    $("#linksFBpageList").html(s);
+function renderFBpageEntries(calledFBpage) {
+	if(localStorage[calledFBpage]) {
+		var tempFBentries = JSON.parse(localStorage[calledFBpage])
+		var s = '';
+		$.each(tempFBentries, function(i, v) {
+			s += '<li><a href="#contentPage" class="fbPageLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')" ;><h3>' + v.title + '</h3><p>posted: <strong>' + v.dateString + '</strong></p></a></li>';
+		});
+		$("#linksFBpageList").html(s);
+	} else {
+		$("#FacebookFeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
+	}
 	window.location.hash = '#FacebookFeed';
-    $("#linksFBnotesList").listview("refresh");
     $("#linksFBpageList").listview("refresh");
 	readEntry = "Read on Facebook";
     $.mobile.hidePageLoadingMsg();
+	localStorage["entries"] = JSON.stringify(tempFBentries);
 }
 $(".fbPageLink").live("click", function() {
-	entries = entriesFBpage;
+	//entries = entriesFBpage;
 	selectedEntry = $(this).data("entryid");
 	//console.log($(this).data("entryid"));
-	localStorage["entries"] = JSON.stringify(entries);
+	//localStorage["entries"] = JSON.stringify(entries);
 	localStorage["selectedEntry"] = JSON.stringify(selectedEntry);
 });
 function setSelectedEntry(e){
@@ -968,7 +976,8 @@ $("#videoPlayerPage").live("pageshow", function(prepage) {
 	$("h1", this).text(entries[selectedEntry].title);
 });
 $("#webSitesArchive").live("pageshow", function(prepage) {
-	webSites(renderWebEntries);
+	//webSites(renderWebEntries);
+	renderWebEntries();
 });
 
 function getCurrentDate() {

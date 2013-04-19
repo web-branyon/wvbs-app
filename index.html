@@ -208,8 +208,8 @@
 	  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9');
 	  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9');
 	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json');
-	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26viewer%3D312760610126%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json');
-	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26viewer%3D273848047478%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json');
+	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json');
+	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json');
 	  wvbsNews(renderNewsEntries);	  
     </script>
 
@@ -319,9 +319,9 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
                 <!--<li data-role="list-divider">Recent News Feeds</li>
                 -->
                 <!--Remember to ESCAPE the single quote marks around the URL in the yahoo address-->
-                <li class="fblist"><a href="#" id="wvbsFBListLink" onclick="javascript:facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json',renderFBpageEntries); FacebookFeedTitle('WVBS Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_WVBS_web.png" style="padding: 10px 0px;" width="95" />WVBS Notes</a></li>
-                <li class="fblist"><a href="#" id="sftFBListLink" onclick="javascript:facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26viewer%3D312760610126%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json',renderFBpageEntries); FacebookFeedTitle('Searching for Truth Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Searching-for-Truth_web.png" style="padding: 10px 0px;" width="100" />Searching for Truth</a></li>
-                <li class="fblist"><a href="#" id="boundFBListLink" onclick="javascript:facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26viewer%3D273848047478%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json',renderFBpageEntries); FacebookFeedTitle('Bound Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Bound_web.png" style="padding: 10px 0px;" width="100" />Bound Movie</a></li>
+                <li class="fblist"><a href="#" id="wvbsFBListLink" onclick="javascript:renderFBpageEntries('wvbsFBentries'); FacebookFeedTitle('WVBS Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_WVBS_web.png" style="padding: 10px 0px;" width="95" />WVBS Notes</a></li>
+                <li class="fblist"><a href="#" id="sftFBListLink" onclick="javascript:renderFBpageEntries('sftFBentries'); FacebookFeedTitle('Searching for Truth Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Searching-for-Truth_web.png" style="padding: 10px 0px;" width="100" />Searching for Truth</a></li>
+                <li class="fblist"><a href="#" id="boundFBListLink" onclick="javascript:renderFBpageEntries('boundFBentries'); FacebookFeedTitle('Bound Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Bound_web.png" style="padding: 10px 0px;" width="100" />Bound Movie</a></li>
             </ul>
         </div>
     </div>
