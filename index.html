@@ -194,13 +194,13 @@
 		  //$.mobile.changePage("#contextMenuPage");
 	  }
 	  // Set and Get Accessed dates
-	  if (localStorage.latestAccess)
+	  if (localStorage.wvbs_access_latest)
 	  {
-		  localStorage.setItem('previousAccess',localStorage.latestAccess);
-  		  localStorage.latestAccess = getCurrentDate();
+		  localStorage.setItem('wvbs_access_previous',localStorage.wvbs_access_latest);
+  		  localStorage.wvbs_access_latest = getCurrentDate();
 	  }
 	  else {
-		  localStorage.latestAccess = getCurrentDate();
+		  localStorage.wvbs_access_latest = getCurrentDate();
 	  }
 	  webSites();
 	  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
@@ -298,8 +298,8 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
             <h3>WVBS Online Resources</h3>
             <ul id="weblinksList" data-role="listview" data-inset="true" data-theme="d">
               <li data-theme="c"><a id="webSiteListLink" href="#webSitesArchive" style="padding:20px 85px;"><img src="images/internet-globe.png" width="60" />Video Websites by WVBS</a></li>
-              <li data-theme="c"><a href="#" id="vimeoAlbumListLink" onclick="javascript:vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries); return false;" style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
-			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript:youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc',renderYTAlbumEntries); return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
+              <li data-theme="c"><a href="#" id="vimeoAlbumListLink" onclick="javascript:renderVimeoAlbumEntries('wvbs_video_vimeo_albums'); return false;" style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
+			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript:renderYTAlbumEntries('wvbs_video_YT_albums'); return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
             </ul>
         </div>
 
@@ -308,8 +308,8 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
             <ul id="wvbsFeedList" data-role="listview" data-inset="true" data-theme="c">
                 <!--<li data-role="list-divider">Recent News Feeds</li>
                 -->
-                <li class="fblist"><a href="#" id="wvbsNewProductListLink" onclick="javascript:wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9',renderWVBSEntries); return false;" style="padding:20px 80px;"><img src="images/wvbs-new.png" width="60" />New Products</a></li>
-                <li class="fblist"><a href="#" id="wvbsSpecialProductListLink" onclick="javascript:wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9',renderWVBSEntries); return false;" style="padding:20px 80px;"><img src="images/wvbs-sale.png" width="60" />Current Specials</a></li>
+                <li class="fblist"><a href="#" id="wvbsNewProductListLink" onclick="javascript:renderWVBSEntries('wvbs_product_new'); return false;" style="padding:20px 80px;"><img src="images/wvbs-new.png" width="60" />New Products</a></li>
+                <li class="fblist"><a href="#" id="wvbsSpecialProductListLink" onclick="javascript:renderWVBSEntries('wvbs_product_special'); return false;" style="padding:20px 80px;"><img src="images/wvbs-sale.png" width="60" />Current Specials</a></li>
             </ul>
         </div>
 
@@ -319,9 +319,9 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
                 <!--<li data-role="list-divider">Recent News Feeds</li>
                 -->
                 <!--Remember to ESCAPE the single quote marks around the URL in the yahoo address-->
-                <li class="fblist"><a href="#" id="wvbsFBListLink" onclick="javascript:renderFBpageEntries('wvbsFBentries'); FacebookFeedTitle('WVBS Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_WVBS_web.png" style="padding: 10px 0px;" width="95" />WVBS Notes</a></li>
-                <li class="fblist"><a href="#" id="sftFBListLink" onclick="javascript:renderFBpageEntries('sftFBentries'); FacebookFeedTitle('Searching for Truth Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Searching-for-Truth_web.png" style="padding: 10px 0px;" width="100" />Searching for Truth</a></li>
-                <li class="fblist"><a href="#" id="boundFBListLink" onclick="javascript:renderFBpageEntries('boundFBentries'); FacebookFeedTitle('Bound Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Bound_web.png" style="padding: 10px 0px;" width="100" />Bound Movie</a></li>
+                <li class="fblist"><a href="#" id="wvbsFBListLink" onclick="javascript:renderFBpageEntries('wvbs_fb_wvbs_entries'); FacebookFeedTitle('WVBS Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_WVBS_web.png" style="padding: 10px 0px;" width="95" />WVBS Notes</a></li>
+                <li class="fblist"><a href="#" id="sftFBListLink" onclick="javascript:renderFBpageEntries('wvbs_fb_sft_entries'); FacebookFeedTitle('Searching for Truth Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Searching-for-Truth_web.png" style="padding: 10px 0px;" width="100" />Searching for Truth</a></li>
+                <li class="fblist"><a href="#" id="boundFBListLink" onclick="javascript:renderFBpageEntries('wvbs_fb_bound_entries'); FacebookFeedTitle('Bound Facebook'); return false;" style="padding:20px 100px;"><img src="images/Facebook_Bound_web.png" style="padding: 10px 0px;" width="100" />Bound Movie</a></li>
             </ul>
         </div>
     </div>
