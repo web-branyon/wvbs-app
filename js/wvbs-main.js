@@ -256,7 +256,8 @@ function renderWebEntries() {
     $("#webSitesArchiveList").html(s);
 	window.location.hash = '#webSitesArchive';
     $("#webSitesArchiveList").listview("refresh");
-    $.mobile.hidePageLoadingMsg();    
+    $.mobile.hidePageLoadingMsg();
+	localStorage["wvbs_entries"] = localStorage["wvbs_website_entries"];    
 }
 function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 	if (renderFBpageEntries && typeof(renderFBpageEntries) === "function")
@@ -344,6 +345,7 @@ function renderFBpageEntries(calledFBpage) {
 			s += '<li><a href="#contentPage" class="fbPageLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')" ;><h3>' + v.title + '</h3><p>posted: <strong>' + v.dateString + '</strong></p></a></li>';
 		});
 		$("#linksFBpageList").html(s);
+		localStorage["wvbs_entries"] = localStorage[calledFBpage];
 	} else {
 		$("#FacebookFeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -351,7 +353,6 @@ function renderFBpageEntries(calledFBpage) {
     $("#linksFBpageList").listview("refresh");
 	readEntry = "Read on Facebook";
     $.mobile.hidePageLoadingMsg();
-	//localStorage["entries"] = JSON.stringify(tempFBentries);
 }
 $(".fbPageLink").live("click", function() {
 	//entries = entriesFBpage;
@@ -395,7 +396,7 @@ function wvbsJSON(wvbsRSSurl,numEntries,renderWVBSEntries) {
 			}
 			entriesWVBS = [];
 			$.each(data.query.results.item, function(i, item) {
-				if (i <= numEntries) {
+				//if (i <= numEntries) {
 				//var dateFull = item.pubDate;
 				//var dateComponents = dateFull.split(" ");
 				//var dateString = dateComponents[2] + dateComponents[1] + dateComponents[3];
@@ -407,8 +408,8 @@ function wvbsJSON(wvbsRSSurl,numEntries,renderWVBSEntries) {
 					//thumbnail:$(v).find("thumbnail").text()
 				};
 				entriesWVBS.push(entry);
-				++i;
-				}
+				//++i;
+				//}
 			});
 			currentEntries = entriesWVBS.length;
 			//store entries
@@ -469,10 +470,11 @@ function renderWVBSEntries(calledWVBSList) {
 		var tempWVBSList = JSON.parse(localStorage[calledWVBSList])
 		var s = '';
 		$.each(tempWVBSList, function(i, v) {
-		  s += '<li><a href="#contentPage" class="contentLink" data-entryid="'+i+'">' + v.title + '</a></li>';
+		  s += '<li><a href="#contentPage" class="contentLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')">' + v.title + '</a></li>';
 		});
 		$("#wvbsMoreFeed .ui-btn-text").text("More ...");	
 		$("#wvbslinksList").html(s);
+		localStorage["wvbs_entries"] = localStorage[calledWVBSList]
 	} else {
 		$("#WVBS-FeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -571,6 +573,7 @@ function renderVimeoAlbumEntries(calledVimeoAlbumList) {
 	window.location.hash = '#albumArchive';
     $("#archiveAlbumsList").listview("refresh");
 	$.mobile.hidePageLoadingMsg();
+	localStorage["wvbs_entries"] = localStorage[calledVimeoAlbumList];
 }
 $(".albumLink").live("click", function() {
 	entries = entriesAlbum;
@@ -657,6 +660,7 @@ function renderYTAlbumEntries(calledYTAlbumList) {
 	window.location.hash = '#ytAlbumArchive';
 	$("#ytArchiveAlbumsList").listview("refresh");
 	$.mobile.hidePageLoadingMsg();
+	localStorage["wvbs_entries"] = localStorage[calledYTAlbumList];	
 }
 function sortByKey(array, key) {
     return array.sort(function(a, b) {
@@ -845,7 +849,6 @@ $(".videoLink").live("click", function() {
 	selectedEntry = $(this).data("entryid");
 });
 
-
 function moreFBEntries(addEntries) {
 	var mod = currentEntries % 10;
 	if (mod == 0) {
@@ -856,7 +859,6 @@ function moreFBEntries(addEntries) {
 		$("#fbMoreFeed .ui-btn-text").text("That's All.");
 	}
 }
-
 function renderEntries(entries) {
     var s = '';
     $.each(entries, function(i, v) {
@@ -867,14 +869,12 @@ function renderEntries(entries) {
     $("#linksList").listview("refresh");
     $.mobile.hidePageLoadingMsg();
 }
-
 $("#mainPage").on("pagebeforeshow", function(event,data) {
 	if(data.prevPage.length) {
 		$("h1", data.prevPage).text("");
 		$("#entryText", data.prevPage).html("");
 	};
 });
-
 //listen for detail links
   $(".contentLink").live("click", function() {
 	  selectedEntry = $(this).data("entryid");
@@ -896,9 +896,9 @@ $("#contentPage").live("pageshow", function(prepage) {
 */
 $("#contentPage").live("pageshow", function(prepage) {
 	$.mobile.showPageLoadingMsg("a","Loading...");	
-	if(localStorage["entries"]) {
+	if(localStorage["wvbs_entries"]) {
 		//$("#videoArchiveStatus").html("Using cached version...");
-		entries = JSON.parse(localStorage["entries"]);
+		entries = JSON.parse(localStorage["wvbs_entries"]);
 		selectedEntry = JSON.parse(localStorage["wvbs_selected_entry"]);
 	} else {
 		$("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
@@ -919,27 +919,24 @@ $("#contentPage").live("pageshow", function(prepage) {
 	contentHTML = contentHTML.replace('height="75"','height="150"');
 	contentHTML = contentHTML.replace('width="75"','width="150" style="padding:0px 20px 20px 0px;"');
 
-
-
 	//Set the email link information
 	var emailLink = 'mailto:?subject=Checkout this material from WVBS &body='+ entryTitle + '%3A ' + entries[selectedEntry].link;
 	var emailText =  'Email: ' + entryTitle;
 	$("#emailContainer").find("a").attr('href',emailLink);
 	$("#emailContainer").find("a span span").text(emailText);
 	//$("#entryText",this).html(contentHTML).trigger("create");
-
 	var twitterLink = 'https://twitter.com/intent/tweet?text='+ entryTitle + '&url=' + entries[selectedEntry].link;
 	$("#twitterContainer").find("a").attr('href',twitterLink);
 	//$("#emailContainer").find("a span span").text(emailText);
-	
 	var facebookLink = 'http://www.facebook.com/sharer.php?u=' + entries[selectedEntry].link;
 	$("#facebookContainer").find("a").attr('href',facebookLink);
 	//$("#emailContainer").find("a span span").text(emailText);
 
-
 	$("#entryText",this).html(contentHTML).trigger("create");
+	/*
 	$('a').removeAttr('onmouseover');
 	$('a').removeAttr('onclick');
+	*/
 
 	//Replace HTML Table elements with DIVs to fix width issues
 	var ps = document.getElementsByTagName('table');
@@ -992,7 +989,6 @@ $("#webSitesArchive").live("pageshow", function(prepage) {
 	//webSites(renderWebEntries);
 	renderWebEntries();
 });
-
 function getCurrentDate() {
   var currentDate = new Date();
   var dd = currentDate.getDate();

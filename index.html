@@ -44,7 +44,7 @@
 	<script src="http://code.jquery.com/jquery-migrate-1.0.0.js"></script>    
     <link rel="stylesheet" href="css/mobile.css" />
     <script src="js/wvbs-main.js"></script>
-    <script type="text/javascript" charset="utf-8">
+    <script async type="text/javascript" charset="utf-8">
 		var isMobile = {
 			Android: function() {
 				return navigator.userAgent.match(/Android/i) ? true : false;
@@ -90,7 +90,7 @@
 		});
 */		
       </script>
-	  <script>		
+	  <script async>		
 	  // Call onDeviceReady when Cordova is loaded.
 	  // At this point, the document has loaded but cordova-1.7.0.js has not. When Cordova is loaded and talking with the native device, it will call the event `deviceready`.
 	  function onLoad() {
@@ -115,16 +115,6 @@
 		$( "#newsButton" ).trigger( "click" );
 		//$( "#wvbsNewsUpdate" ).popup( "option", "history", false );
 	  });
-/*
-	  $(window).load(loadNews);
-	  
-	  function setupNews(){
-		$( "#wvbsNewsUpdate" ).popup({ history : false });
-	  }
-	  function loadNews(){
-		$( "#newsButton" ).trigger( "click" );
-	  }
-*/	  
 	  function closeNewsBox(){
 		  //$( "#wvbsNewsUpdate" ).popup( "close" );
 		  $('#newsDIV').slideUp();
@@ -167,7 +157,7 @@
 		  //$('[data-role=page]').live('pageshow', TrackPageView);
       </script>
 -->
-      <script>	  	  
+      <script async>	  	  
 	  function checkConnection() {
         var networkState = navigator.network.connection.type;
         var states = {};
@@ -202,6 +192,8 @@
 	  else {
 		  localStorage.wvbs_access_latest = getCurrentDate();
 	  }
+	  </script>
+      <script>
 	  webSites();
 	  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
 	  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
@@ -213,8 +205,8 @@
 	  wvbsNews(renderNewsEntries);	  
     </script>
 
-	<script type="text/javascript" src="js/GALocalStorage.js"></script>
-    <script>
+	<script async type="text/javascript" src="js/GALocalStorage.js"></script>
+    <script async>
       //google analytics method: https://github.com/ggendre/GALocalStorage
         ga_storage._setAccount('UA-24957485-3');
         ga_storage._setDomain('none');
@@ -556,6 +548,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
   
   <div data-role="page" id="WVBS-Feed" class="bground" data-title="WVBS Product Feed" data-dom-cache="true">
+	  <!--
 	  <script>
 		$("#WVBS-Feed").live("pageinit", function() {
 			//wvbsJSON(' ','10');			
@@ -566,6 +559,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 			}
 		});
       </script>
+      -->
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1>WVBS Product Feed</h1>
@@ -577,7 +571,10 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   
       <div class="content" data-role="content" id="webEntryText">
         <ul id="wvbslinksList" data-role="listview" data-filter="true" data-inset="true" data-theme="d"></ul>
-        <a id="wvbsMoreFeed" data-role="button" data-theme="a" href="#" onClick="javascript:moreWVBSEntries(9); return false;">More ...</a>
+<!--        <a id="wvbsMoreFeed" data-role="button" data-theme="a" href="#" onClick="javascript:moreWVBSEntries(9); return false;">More ...</a>
+-->
+<a data-ajax="false" data-role="button" data-theme="a" href="#WVBS-Feed" data-icon="arrow-u" data-iconpos="top" >Back to Top</a>
+
 		<div id="WVBS-FeedStatus" class="status" style="padding-bottom:10px;" ></div>  
       </div>
   
@@ -593,7 +590,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
 
   <div data-role="page" id="FacebookFeed" class="bground" data-title="WVBS Facebook Feed" data-dom-cache="true">
-	  <script>
+<!--	  <script>
 		$("#FacebookFeed").live("pageinit", function() {
 			if(localStorage["moreRSSurl"]) {
 				moreRSSurl = JSON.parse(localStorage["moreRSSurl"]);
@@ -605,6 +602,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 			}
 		});
       </script>
+-->      
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1 class="title"></h1>
@@ -622,13 +620,14 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
           </ul>
         </div>
 -->
-        <div data-role="collapsible" data-collapsed="false" data-content-theme="a" data-inset="true" data-theme="b">
-          <h3>Facebook Status Posts</h3>
-          <ul id="linksFBpageList" data-role="listview" data-inset="true" data-theme="d">
+
+        <div data-content-theme="a" data-inset="true" data-theme="b">
+          <ul id="linksFBpageList" data-role="listview" data-filter="true" data-inset="true" data-theme="d">
             <li>LOADING ...</li>
           </ul>
         </div>
 		<div id="FacebookFeedStatus" class="status" style="padding-bottom:10px;" ></div>  
+		<a data-ajax="false" data-role="button" data-theme="a" href="#FacebookFeed" data-icon="arrow-u" data-iconpos="top" >Back to Top</a>
           <!--More Facebook entries, however without using FB Graph API and access_token, there is a limit of 10 entries
            <a id="fbMoreFeed" data-role="button" data-theme="a" href="#" onClick="javascript:moreFBEntries(10); return false;">More ...</a>
           -->
