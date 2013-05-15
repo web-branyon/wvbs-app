@@ -38,6 +38,9 @@
 function showLoader() {
   $.mobile.showPageLoadingMsg("a","Loading...");
 }
+function hideLoader() {
+  $.mobile.hidePageLoadingMsg();
+}
 /*
 //Listen for main page
   $("#mainPage").live("pageinit", function() {
@@ -717,30 +720,28 @@ function youtubeVideoJSON(youtubeJSONurl) {
 			entriesVideo = sortByKey(entriesVideo,'date');
 			localStorage["wvbs_video_YT_videos"] = JSON.stringify(entriesVideo);
 			renderYTEntries(entriesVideo);
-			$("#videoArchiveStatus").html("");
+			$("#ytVideoArchiveStatus").html("");
 		},
 		error:function(jqXHR,status,error) {
 			//try to use cache
 			//console.log(entriesAlbum);
 			if(localStorage["wvbs_video_YT_videos"]) {
-				$("#videoArchiveStatus").html("Using cached version...");
 				entriesVideo = JSON.parse(localStorage["wvbs_video_YT_videos"])
 				renderYTEntries(entriesVideo);				
 			} else {
-				$("#videoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
+				$("#ytVideoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
 			}
 		}
 	});
 }
 function renderYTEntries(entriesVideo) {
-    //entries = entriesVideo;
     var s = '';
     $.each(entriesVideo, function(i, v) {
         s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
     });
-    $("#archiveVideosList").html(s);
-	window.location.hash = '#videoArchive';
-    $("#archiveVideosList").listview("refresh");
+    $("#ytArchiveVideosList").html(s);
+	window.location.hash = '#ytVideoArchive';
+    $("#ytArchiveVideosList").listview("refresh");
 	$.mobile.hidePageLoadingMsg();
 }
 
@@ -813,7 +814,6 @@ function vimeoVideoJSON(vimeoRSSurl,numEntries) {
 	});
 }
 function renderVimeoEntries(entriesVideo) {
-    //entries = entriesVideo;
     var s = '';
     $.each(entriesVideo, function(i, v) {
         s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';

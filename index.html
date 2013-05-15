@@ -290,8 +290,8 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
             <h3>WVBS Online Resources</h3>
             <ul id="weblinksList" data-role="listview" data-inset="true" data-theme="d">
               <li data-theme="c"><a id="webSiteListLink" href="#webSitesArchive" style="padding:20px 85px;"><img src="images/internet-globe.png" width="60" />Video Websites by WVBS</a></li>
-              <li data-theme="c"><a href="#" id="vimeoAlbumListLink" onclick="javascript:renderVimeoAlbumEntries('wvbs_video_vimeo_albums'); return false;" style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
-			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript:renderYTAlbumEntries('wvbs_video_YT_albums'); return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
+              <li data-theme="c"><a href="#" id="vimeoAlbumListLink" onclick="javascript:renderVimeoAlbumEntries('wvbs_video_vimeo_albums'); showLoader(); return false;" style="padding:20px 85px;"><img src="images/play-button.png" width="60" />Streaming Video Albums by WVBS</a></li>
+			  <li data-theme="c"><a href="#" id="ytAlbumListLink" onclick="javascript:renderYTAlbumEntries('wvbs_video_YT_albums'); showLoader(); return false;" style="padding:20px 85px;"><img src="images/youtube_logo_standard_againstwhite.png" width="75" style="padding-top:15px;" />Video Playlists by WVBS</a></li>
             </ul>
         </div>
 
@@ -399,6 +399,11 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
 
   <div data-role="page" id="albumArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
+	  <script>
+		$("#albumArchive").live("pageinit", function() {
+			$.mobile.hidePageLoadingMsg();
+		});
+      </script>
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1>WVBS Video Album Archive</h1>
@@ -425,6 +430,18 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
     
     <div data-role="page" id="videoArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
+	  <script>
+		$("#videoArchive").live("pageinit", function() {
+		  if ($('#archiveVideosList li').length == 0) {
+			  if(localStorage["wvbs_video_vimeo_videos"]) {
+				  entriesVideo = JSON.parse(localStorage["wvbs_video_vimeo_videos"])
+				  renderVimeoEntries(entriesVideo);				
+			  } else {
+				  $("#videoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
+			  }
+		  }
+		});
+      </script>
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1>WVBS Video Archive</h1>
@@ -455,7 +472,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   <div data-role="page" id="ytAlbumArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
 	  <script>
 		$("#ytAlbumArchive").live("pageinit", function() {
-			//vimeoAlbumJSON(' ','50');
+			$.mobile.hidePageLoadingMsg();
 		});
       </script>
       <div data-role="header" data-position="fixed">
@@ -487,6 +504,15 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 	  <script>
 		$("#ytVideoArchive").live("pageinit", function() {
 			//vimeoVideoJSON(' ','50');
+
+		if ($('#ytArchiveVideosList li').length == 0) {
+			if(localStorage["wvbs_video_YT_videos"]) {
+				entriesVideo = JSON.parse(localStorage["wvbs_video_YT_videos"])
+				renderYTEntries(entriesVideo);				
+			} else {
+				$("#ytVideoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
+			}
+		}
 		});
       </script>
       <div data-role="header" data-position="fixed">
