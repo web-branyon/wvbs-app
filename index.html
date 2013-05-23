@@ -115,62 +115,15 @@
 	  // Cordova is loaded and it is now safe to make calls Cordova methods
 	  function onDeviceReady() {
 		  // Register the event listener
-		  //document.addEventListener("menubutton", onMenuShow, false);
 		  document.addEventListener('menubutton', function(){
-			  alert('You pressed the menu button');
+			  //alert('You pressed the menu button');
+			  onMenuShow();
 		  });
 		  //checkConnection();
-		  //startGAPlugin();
-		   window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);    
+		  //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);    
 	  }
 	  </script>
-      <script>
-	  var DATADIR;
-	  var knownfiles = []; 	  
-	  //Loaded my file system, now let's get a directory entry
-	  function onFSSuccess(fileSystem) {
-		  fileSystem.root.getDirectory("Android/data/org.wvbs.videos",{create:true},gotDir,onError);
-	  }
-	  //The directory entry callback
-	  function gotDir(d){
-		  console.log("got dir");
-		  DATADIR = d;
-		  var reader = DATADIR.createReader();
-		  reader.readEntries(function(d){ gotFiles(d); appReady(); }, onError);
-	  }
-	  //Result of reading my directory
-	  function gotFiles(entries) {
-		  console.log("The dir has "+entries.length+" entries.");
-		  for (var i=0; i<entries.length; i++) {
-			  console.log(entries[i].name+' dir? '+entries[i].isDirectory);
-			  knownfiles.push(entries[i].name);
-		  }
-	  }
-	  function appReady(){
-		  $("#status").html("Ready to check remote files...");
-		  $.get("http://www.raymondcamden.com/demos/2012/jan/17/imagelister.cfc?method=listimages", {}, function(res) {
-			  if (res.length > 0) {
-				  $("#status").html("Going to sync some images...");
-				  for (var i = 0; i < res.length; i++) {
-					  if (knownfiles.indexOf(res[i]) == -1) {
-						  console.log("need to download " + res[i]);
-						  var ft = new FileTransfer();
-						  var dlPath = DATADIR.fullPath + "/" + res[i];
-						  console.log("downloading to " + dlPath);
-						  ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(e){
-							  console.log("Successful download of"+e.fullPath);
-						  }, onError);
-					  }
-				  }
-			  }
-			  $("#status").html("");
-		  }, "json");
-	  }
-	  function onError(e){
-		  console.log("ERROR");
-		  console.log(JSON.stringify(e));
-	  }
-    </script>
+    <!--<script async src="js/wvbs-cache.js"></script>-->
 	<script>	  
 	  $(window).load(function(){
 		$( "#wvbsNewsUpdate" ).popup({ history: false });
@@ -269,8 +222,8 @@
 	  wvbsNews(renderNewsEntries);	  
     </script>
 
-	<script async type="text/javascript" src="js/GALocalStorage.js"></script>
-    <script async>
+	<script type="text/javascript" src="js/GALocalStorage.js"></script>
+    <script>
       //google analytics method: https://github.com/ggendre/GALocalStorage
         ga_storage._setAccount('UA-24957485-3');
         ga_storage._setDomain('none');
@@ -517,6 +470,8 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   
       <div class="content" data-role="content">
         <ul id="archiveVideosList" data-role="listview" data-filter="true" data-inset="true" data-divider-theme="c" data-theme="d" data-count-theme="e"></ul>
+        <!--<ul id="archiveVideosList" data-role="listview" data-filter="true" data-inset="true" data-divider-theme="c" data-theme="d" data-count-theme="e" data-split-icon="arrow-d" data-split-theme="c"></ul>
+        -->
 		<div id="videoArchiveStatus" class="status" style="padding-bottom:10px;" ></div>  
       </div>
   

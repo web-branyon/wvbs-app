@@ -136,7 +136,6 @@ function appUpdated(incomingDate) {
   }
   else { return (false); }
 }
-
 function wvbsNews(renderNewsEntries)
 {
 	  $.ajax({
@@ -178,6 +177,56 @@ function wvbsNews(renderNewsEntries)
 	  }); 
 }
 function renderNewsEntries(entriesNews) {
+    entries = entriesNews;
+    var s = '';
+    $.each(entries, function(i, v) {
+        s += '<div data-entryid="'+i+'">' + v.description + '</div>';
+		//console.log(entriesNews[i].description);
+    });
+    $('#newsMessages').append(s);
+	$("#newsDIV").css('display','block');
+}
+function wvbsVideoCache(renderVideoCache)
+{
+	  $.ajax({
+		  type: "GET",
+		  url:RSS,
+		  timeout: 5000, // milliseconds
+		  success:function(res,code) {
+			  entriesNews = [];
+			  var xmlWeb = $(res);
+			  var itemsWeb = xmlWeb.find("news");
+			  $.each(itemsWeb, function(i, v) {
+				  entry = { 
+					  description:$(v).find("description").text(),
+				  };
+				  entriesNews.push(entry);
+			  });
+			  //store entries
+			  localStorage["wvbs_news_entries"] = JSON.stringify(entriesNews);
+			  //
+			  if (renderNewsEntries && typeof(renderNewsEntries) === "function") {
+				  renderNewsEntries(entriesNews);
+			  }
+		  },
+		  error:function(jqXHR,status,error) {
+			if(status == 'timeout')
+				alert("connection timed-out, try again or check your internet connection.");
+			//try to use cache
+			  if(localStorage["wvbs_news_entries"]) {
+				  //$("#webSitesArchiveStatus").html("Using cached version...");
+				  //$("#webSitesArchiveStatus").style.visibility = "visible";
+				  entriesNews = JSON.parse(localStorage["wvbs_news_entries"])
+				  if (renderNewsEntries && typeof(renderNewsEntries) === "function") {
+					  renderNewsEntries(entriesNews);
+				  }				
+			  } else {
+				  $("#webSitesArchiveStatus").html("Sorry, we are unable to get the website list and there is no cache.");
+			  }
+		  }
+	  }); 
+}
+function renderVideoCache(entriesNews) {
     entries = entriesNews;
     var s = '';
     $.each(entries, function(i, v) {
@@ -567,7 +616,7 @@ function renderVimeoAlbumEntries(calledVimeoAlbumList) {
 	  var tempVimeoList = JSON.parse(localStorage[calledVimeoAlbumList])
 	  var s = '';
 	  $.each(tempVimeoList, function(i, v) {
-		  s += '<li><a class="albumLink" href="#" onclick="javascript:vimeoVideoJSON(\'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\\\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Falbum%2F' + v.id + '%2Fvideos.xml\\\'&format=json\',\'50\'); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
+		  s += '<li><a class="albumLink" href="#" onclick="javascript:vimeoVideoJSON(\'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\\\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Falbum%2F' + v.id + '%2Fvideos.xml\\\'&format=json\',' + i + ',renderVimeoEntries); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 	  });
     $("#archiveAlbumsList").html(s);
 	} else {
@@ -583,6 +632,112 @@ $(".albumLink").live("click", function() {
 	selectedEntry = $(this).data("entryid");
 	selectedAlbumEntry = $(this).data("entryid");
 });
+function vimeoVideoJSON(vimeoRSSurl,entryIndex,callback) {
+  if (callback && typeof(callback) === "function") {
+	  $.mobile.showPageLoadingMsg("a","Loading...");
+  }
+	//Set the title
+	var TITLE = "WVBS Online Video Collection";
+	var albums = [];
+	$("h1", this).text(TITLE);
+	$.ajax({
+		type: "GET",
+		url: vimeoRSSurl,
+		dataType: "jsonp",
+		contentType: "application/json",
+		success: function(data) {
+			entriesVideo = [];
+			$.each(data.query.results.videos.video, function(i, video) {
+				//if (i <= numEntries) {
+				  var dateFull = video.upload_date;
+				  var dateComponents = dateFull.split(" ");
+				  //var duractionSeconds = album.duration;
+				  var duration = Math.floor(video.duration/60);
+				  entry = { 
+					  id:video.id,
+					  title:video.title, 
+					  date:dateComponents[0],
+					  duration:duration,
+					  link:video.link, 
+					  description:$.trim(video.description),
+				  };
+				  entriesVideo.push(entry);
+				  //++i;
+				//}
+			});
+			if (entriesVideo.length == 0) {
+				json = data.query.results.videos.video;
+				dateFull = json.upload_date;
+				dateComponents = dateFull.split(" ");
+				duration = Math.floor(json.duration/60);
+				entry = { 
+					  id:json.id,
+					  title:json.title, 
+					  date:dateComponents[0],
+					  duration:duration,
+					  link:json.link, 
+					  description:$.trim(json.description),
+				};
+			  entriesVideo[0] = entry;
+			}
+			//store entries
+			localStorage["wvbs_video_vimeo_videos"] = JSON.stringify(entriesVideo);
+			albums = JSON.parse(localStorage["wvbs_video_vimeo_albums"]);
+			albums[entryIndex].videos = entriesVideo;
+			localStorage["wvbs_video_vimeo_albums"] = JSON.stringify(albums);
+			if (callback && typeof(callback) === "function") {
+				  callback('wvbs_video_vimeo_videos');
+				  $("#videoArchiveStatus").html("");
+			}
+		},
+		error:function(jqXHR,status,error) {
+			//try to use cache
+			if(localStorage["wvbs_video_vimeo_videos"]) {
+				$("#videoArchiveStatus").html("Using cached version...");
+				entriesVideo = JSON.parse(localStorage["wvbs_video_vimeo_videos"])
+				if (callback && typeof(callback) === "function") {
+					callback('wvbs_video_vimeo_videos');
+				}
+			} else {
+				$("#videoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
+			}
+		}
+	});
+}
+function renderVimeoEntries(calledVimeoVideoList) {
+	if(localStorage[calledVimeoVideoList]) {
+		var tempVimeoList = JSON.parse(localStorage[calledVimeoVideoList])
+		var s = '';
+		$.each(tempVimeoList, function(i, v) {
+			s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+		  //<a onclick="javascript:cacheVideo(' + v.id + ');">Save</a>
+		});
+		$("#archiveVideosList").html(s);
+	} else {
+		  $("#albumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
+	}	  
+	window.location.hash = '#videoArchive';
+	$("#archiveVideosList").listview("refresh");
+	$.mobile.hidePageLoadingMsg();
+}
+function mergeVideos() {
+	if(localStorage["wvbs_video_vimeo_albums"]) {
+		var albums = JSON.parse(localStorage["wvbs_video_vimeo_albums"]);
+		for (var a = 0; a < albums.length; a++) {
+			vRSS = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Falbum%2F'+albums[a].id+'%2Fvideos.xml\'&format=json';
+			vimeoVideoJSON(vRSS,a);
+		}
+	}
+}
+var returnedVideos = [];
+function returnVideoVimeoJSON(storageList){
+	returnedVideos.push(JSON.parse(localStorage["wvbs_video_vimeo_videos"]));
+}
+
+function cacheVideo(videoID) {
+	
+}
+
 /******************YOUTUBE DATA***************/
 function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
   if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function")
@@ -745,84 +900,6 @@ function renderYTEntries(entriesVideo) {
 	$.mobile.hidePageLoadingMsg();
 }
 
-function vimeoVideoJSON(vimeoRSSurl,numEntries) {
-	$.mobile.showPageLoadingMsg("a","Loading...");
-
-	if (typeof numEntries == 'undefined' ) numEntries = 6;
-	moreRSSurl = vimeoRSSurl;
-	currentEntries = parseInt(numEntries);
-	//Set the title
-	var TITLE = "WVBS Online Video Collection";
-	$.mobile.showPageLoadingMsg("a","Loading...");
-	$("h1", this).text(TITLE);
-	$.ajax({
-		type: "GET",
-		url: vimeoRSSurl,
-		dataType: "jsonp",
-		contentType: "application/json",
-		success: function(data) {
-			entriesVideo = [];
-			i = 0;
-			$.each(data.query.results.videos.video, function(i, video) {
-				if (i <= numEntries) {
-				  var dateFull = video.upload_date;
-				  var dateComponents = dateFull.split(" ");
-				  //var duractionSeconds = album.duration;
-				  var duration = Math.floor(video.duration/60);
-				  entry = { 
-					  id:video.id,
-					  title:video.title, 
-					  date:dateComponents[0],
-					  duration:duration,
-					  link:video.link, 
-					  description:$.trim(video.description),
-				  };
-				  entriesVideo.push(entry);
-				  ++i;
-				}
-			});
-			if (entriesVideo.length == 0) {
-				json = data.query.results.videos.video;
-				dateFull = json.upload_date;
-				dateComponents = dateFull.split(" ");
-				duration = Math.floor(json.duration/60);
-				entry = { 
-					  id:json.id,
-					  title:json.title, 
-					  date:dateComponents[0],
-					  duration:duration,
-					  link:json.link, 
-					  description:$.trim(json.description),
-				};
-			  entriesVideo[0] = entry;
-			}
-			//store entries
-			localStorage["wvbs_video_vimeo_videos"] = JSON.stringify(entriesVideo);
-			renderVimeoEntries(entriesVideo);
-			$("#videoArchiveStatus").html("");
-		},
-		error:function(jqXHR,status,error) {
-			//try to use cache
-			if(localStorage["wvbs_video_vimeo_videos"]) {
-				$("#videoArchiveStatus").html("Using cached version...");
-				entriesVideo = JSON.parse(localStorage["wvbs_video_vimeo_videos"])
-				renderVimeoEntries(entriesVideo);				
-			} else {
-				$("#videoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
-			}
-		}
-	});
-}
-function renderVimeoEntries(entriesVideo) {
-    var s = '';
-    $.each(entriesVideo, function(i, v) {
-        s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
-    });
-    $("#archiveVideosList").html(s);
-	window.location.hash = '#videoArchive';
-    $("#archiveVideosList").listview("refresh");
-	$.mobile.hidePageLoadingMsg();
-}
 /*############## Original Working Code for In-App Player##########
 function renderVimeoEntries(entriesVideo) {
     var s = '';
