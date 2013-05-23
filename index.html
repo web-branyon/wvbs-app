@@ -90,6 +90,21 @@
 		});
 */		
       </script>
+<!--
+	  <script src="http://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
+      <script>
+	   $(document).ready(function() {
+		   Parse.initialize("ivNqVNa8c4vqQ2isqiGaFWowXluDhh2IIbUGVYwP", "WyAYOsnp2jLZgeIfH7X9NSTXrgFezNHYqL4BGVBj");
+		   var TestObject = Parse.Object.extend("TestObject");
+			var testObject = new TestObject();
+			testObject.save({foo: "bar"}, {
+			  success: function(object) {
+				alert("yay! it worked");
+			  }
+			});
+	   });
+      </script>
+-->
 	  <script async>		
 	  // Call onDeviceReady when Cordova is loaded.
 	  // At this point, the document has loaded but cordova-1.7.0.js has not. When Cordova is loaded and talking with the native device, it will call the event `deviceready`.
@@ -102,12 +117,61 @@
 		  // Register the event listener
 		  //document.addEventListener("menubutton", onMenuShow, false);
 		  document.addEventListener('menubutton', function(){
-			  //alert('You pressed the menu button');
+			  alert('You pressed the menu button');
 		  });
 		  //checkConnection();
 		  //startGAPlugin();
+		   window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);    
 	  }
-
+	  </script>
+      <script>
+	  var DATADIR;
+	  var knownfiles = []; 	  
+	  //Loaded my file system, now let's get a directory entry
+	  function onFSSuccess(fileSystem) {
+		  fileSystem.root.getDirectory("Android/data/org.wvbs.videos",{create:true},gotDir,onError);
+	  }
+	  //The directory entry callback
+	  function gotDir(d){
+		  console.log("got dir");
+		  DATADIR = d;
+		  var reader = DATADIR.createReader();
+		  reader.readEntries(function(d){ gotFiles(d); appReady(); }, onError);
+	  }
+	  //Result of reading my directory
+	  function gotFiles(entries) {
+		  console.log("The dir has "+entries.length+" entries.");
+		  for (var i=0; i<entries.length; i++) {
+			  console.log(entries[i].name+' dir? '+entries[i].isDirectory);
+			  knownfiles.push(entries[i].name);
+		  }
+	  }
+	  function appReady(){
+		  $("#status").html("Ready to check remote files...");
+		  $.get("http://www.raymondcamden.com/demos/2012/jan/17/imagelister.cfc?method=listimages", {}, function(res) {
+			  if (res.length > 0) {
+				  $("#status").html("Going to sync some images...");
+				  for (var i = 0; i < res.length; i++) {
+					  if (knownfiles.indexOf(res[i]) == -1) {
+						  console.log("need to download " + res[i]);
+						  var ft = new FileTransfer();
+						  var dlPath = DATADIR.fullPath + "/" + res[i];
+						  console.log("downloading to " + dlPath);
+						  ft.download("http://www.raymondcamden.com/demos/2012/jan/17/" + escape(res[i]), dlPath, function(e){
+							  console.log("Successful download of"+e.fullPath);
+						  }, onError);
+					  }
+				  }
+			  }
+			  $("#status").html("");
+		  }, "json");
+	  }
+	  function onError(e){
+		  console.log("ERROR");
+		  console.log(JSON.stringify(e));
+	  }
+    </script>
+	<script>	  
 	  $(window).load(function(){
 		$( "#wvbsNewsUpdate" ).popup({ history: false });
 		//$( "#wvbsNewsUpdate" ).popup("reposition",{ positionTo : newsDIV });
