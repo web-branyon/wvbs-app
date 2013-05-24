@@ -90,21 +90,6 @@
 		});
 */		
       </script>
-<!--
-	  <script src="http://www.parsecdn.com/js/parse-1.2.7.min.js"></script>
-      <script>
-	   $(document).ready(function() {
-		   Parse.initialize("ivNqVNa8c4vqQ2isqiGaFWowXluDhh2IIbUGVYwP", "WyAYOsnp2jLZgeIfH7X9NSTXrgFezNHYqL4BGVBj");
-		   var TestObject = Parse.Object.extend("TestObject");
-			var testObject = new TestObject();
-			testObject.save({foo: "bar"}, {
-			  success: function(object) {
-				alert("yay! it worked");
-			  }
-			});
-	   });
-      </script>
--->
 	  <script async>		
 	  // Call onDeviceReady when Cordova is loaded.
 	  // At this point, the document has loaded but cordova-1.7.0.js has not. When Cordova is loaded and talking with the native device, it will call the event `deviceready`.
@@ -112,11 +97,9 @@
 		  document.addEventListener("deviceready", onDeviceReady, false);
 		  $( document ).bind( "pagebeforeload", function(){ $("[data-role=footer]").style.display = "none"; }, false);
 	  }
-	  // Cordova is loaded and it is now safe to make calls Cordova methods
+	  // Cordova is loaded and it is now safe to make calls to Cordova methods
 	  function onDeviceReady() {
-		  // Register the event listener
 		  document.addEventListener('menubutton', function(){
-			  //alert('You pressed the menu button');
 			  onMenuShow();
 		  });
 		  //checkConnection();
@@ -210,16 +193,21 @@
 		  localStorage.wvbs_access_latest = getCurrentDate();
 	  }
 	  </script>
-      <script>
-	  webSites();
-	  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
-	  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
-	  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9');
-	  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9');
-	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json');
-	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json');
-	  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json');
-	  wvbsNews(renderNewsEntries);	  
+      <script async>
+	  function refreshCache() {
+		  webSites();
+		  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
+		  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
+		  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9');
+		  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9');
+		  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json');
+		  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json');
+		  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json');
+		  wvbsNews(renderNewsEntries);
+		  mergeVimeoVideosAndAlbums();
+		  mergeYTVideosAndAlbums();
+	  }
+	  refreshCache();
     </script>
 
 	<script type="text/javascript" src="js/GALocalStorage.js"></script>
@@ -339,7 +327,8 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div data-role="navbar" data-iconpos="top" data-theme="c" >
           <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
+                <li><a href="javascript:showLoader(); refreshCache();" data-icon="refresh">Refresh Data</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
           </ul>
       </div><!-- /navbar -->
@@ -408,7 +397,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -439,7 +428,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div>
@@ -479,7 +468,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div>
@@ -512,7 +501,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -552,7 +541,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -585,7 +574,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -627,7 +616,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -682,7 +671,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -708,7 +697,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
@@ -731,7 +720,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
                 <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
-                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact</a></li>
+                <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
         </div><!-- /navbar -->
