@@ -613,10 +613,10 @@ function vimeoAlbumJSON(vimeoXMLurl,numEntries,renderVimeoAlbumEntries) {
 }
 function renderVimeoAlbumEntries(calledVimeoAlbumList) {
   if(localStorage[calledVimeoAlbumList]) {
+	  mergeVimeoVideosAndAlbums();
 	  var tempVimeoList = JSON.parse(localStorage[calledVimeoAlbumList]);
 	  var s = '';
 	  $.each(tempVimeoList, function(i, v) {
-		  //s += '<li><a class="albumLink" href="#" onclick="javascript:vimeoVideoJSON(\'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\\\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Falbum%2F' + v.id + '%2Fvideos.xml\\\'&format=json\',' + i + ',renderVimeoEntries); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 		  s += '<li><a class="albumLink" href="#" onclick="javascript:renderVimeoEntries(\'wvbs_video_vimeo_albums\',' + i + '); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 	  });
     $("#archiveAlbumsList").html(s);
@@ -651,9 +651,7 @@ function vimeoVideoJSON(vimeoRSSurl,entryIndex,callback) {
 			$.each(data.query.results.videos.video, function(i, video) {
 				//if (i <= numEntries) {
 				  var dateFull = video.upload_date;
-				  console.log("id="+video.id+", upload_date="+video.upload_date);
 				  var dateComponents = dateFull.split(" ");
-				  //var duractionSeconds = album.duration;
 				  var duration = Math.floor(video.duration/60);
 				  entry = { 
 					  id:video.id,
@@ -710,6 +708,7 @@ function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
 	if(localStorage[calledVimeoVideoList]) {
 		var tempAlbumList = JSON.parse(localStorage[calledVimeoVideoList]);
 		var tempVideoList = tempAlbumList[entryIndex].videos;
+		console.log(tempVideoList);
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
 			s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
@@ -744,8 +743,7 @@ function cacheVideo(videoID) {
 
 /******************YOUTUBE DATA***************/
 function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
-  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function")
-  {
+  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
 	  $.mobile.showPageLoadingMsg("a","Loading...");
   }
 	var TITLE = "WorldVBS YouTube Playlists";
@@ -799,7 +797,6 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 				//renderYTAlbumEntries(entriesYTAlbum);				
 			  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
 				  renderYTAlbumEntries('wvbs_video_YT_albums');
-				  $("#albumArchiveStatus").html("");
 			  }
 			} else {
 				$("#albumArchiveStatus").html("Sorry, we are unable to get the Video Album List and there is no cache.");
@@ -808,9 +805,9 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 	});
 }
 function renderYTAlbumEntries(calledYTAlbumList) {
-    entries = calledYTAlbumList;
 	if(localStorage[calledYTAlbumList]) {
-		var tempYTList = JSON.parse(localStorage[calledYTAlbumList])
+		mergeYTVideosAndAlbums();
+		var tempYTList = JSON.parse(localStorage[calledYTAlbumList]);
 		var s = '';
 		$.each(tempYTList, function(i, v) {
 		  s += '<li><a class="albumLink" href="#" onclick="javascript:renderYTEntries(\'wvbs_video_YT_albums\',' + i + '); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
@@ -830,22 +827,24 @@ function sortByKey(array, key) {
         return ((x > y) ? -1 : ((x < y) ? 1 : 0));
     });
 }
-function youtubeVideoJSON(youtubeJSONurl) {
-	$.mobile.showPageLoadingMsg("a","Loading...");
-
-	moreRSSurl = youtubeJSONurl;
+function youtubeVideoJSON(youtubeJSONurl,entryIndex,callback) {
+  if (callback && typeof(callback) === "function") {
+	  $.mobile.showPageLoadingMsg("a","Loading...");
+  }
 	//Set the title
+	var albums = [];
 	var TITLE = "WorldVBS YouTube Playlist Videos";
-	//$("h1", this).text(TITLE);
+	$("h1", this).text(TITLE);
 	$.ajax({
 		type: "GET",
 		url: youtubeJSONurl,
 		dataType: "jsonp",
 		contentType: "application/json",
-		success: function(objdata) {
-			//console.log("youtubeVideoJSON.success");
+		success: function(data) {
+			console.log("success data: " + data);
+			t = data;
 			entriesVideo = [];
-			$.each(objdata.data.items, function(i, videos) {
+			$.each(data.data.items, function(i, videos) {
 				  var dateFull = videos.video.updated;
 				  var dateComponents = dateFull.split("T");
 				  var duration = Math.floor(videos.video.duration/60);
@@ -861,32 +860,40 @@ function youtubeVideoJSON(youtubeJSONurl) {
 				  ++i;
 			});
 			if (entriesVideo.length == 0) {
-				json = objdata.data.items.video;
-				dateFull = json.updated;
+				json = data.data.items;
+				dateFull = json.video.updated;
 				dateComponents = dateFull.split("T");
-				duration = Math.floor(json.duration/60);
+				duration = Math.floor(json.video.duration/60);
 				entry = { 
-					  id:json.id,
-					  title:json.title, 
+					  id:json.video.id,
+					  title:json.video.title, 
 					  date:dateComponents[0],
 					  duration:duration,
 					  //link:json.link, 
-					  description:$.trim(json.description),
+					  description:$.trim(json.video.description),
 				};
 			  entriesVideo[0] = entry;
 			}
 			//store entries
 			entriesVideo = sortByKey(entriesVideo,'date');
 			localStorage["wvbs_video_YT_videos"] = JSON.stringify(entriesVideo);
-			renderYTEntries(entriesVideo);
-			$("#ytVideoArchiveStatus").html("");
+			albums = JSON.parse(localStorage["wvbs_video_YT_albums"]);
+			albums[entryIndex].videos = entriesVideo;
+			localStorage["wvbs_video_YT_albums"] = JSON.stringify(albums);
+			if (callback && typeof(callback) === "function") {
+				  callback('wvbs_video_YT_videos',entryIndex);
+				  $("#ytVideoArchiveStatus").html("");
+			}
 		},
 		error:function(jqXHR,status,error) {
+			console.log('youtubeAlbumJSON returned error');
 			//try to use cache
-			//console.log(entriesAlbum);
 			if(localStorage["wvbs_video_YT_videos"]) {
+				$("#ytVideoArchiveStatus").html("Using cached version...");
 				entriesVideo = JSON.parse(localStorage["wvbs_video_YT_videos"])
-				renderYTEntries(entriesVideo);				
+				if (callback && typeof(callback) === "function") {
+					callback('wvbs_video_YT_videos');
+				}
 			} else {
 				$("#ytVideoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
 			}
@@ -894,6 +901,7 @@ function youtubeVideoJSON(youtubeJSONurl) {
 	});
 }
 function renderYTEntries(calledYTVideoList,entryIndex) {
+	console.log(calledYTVideoList + ", " + entryIndex);
 	if(localStorage[calledYTVideoList]) {
 		var tempAlbumList = JSON.parse(localStorage[calledYTVideoList]);
 		var tempVideoList = tempAlbumList[entryIndex].videos;
@@ -910,10 +918,12 @@ function renderYTEntries(calledYTVideoList,entryIndex) {
 	$.mobile.hidePageLoadingMsg();
 }
 function mergeYTVideosAndAlbums() {
+	console.log("mergeYTVideosAndAlbums initiated");
 	if(localStorage["wvbs_video_YT_albums"]) {
 		var albums = JSON.parse(localStorage["wvbs_video_YT_albums"]);
+		console.log("wvbs_videos_YT_albums = " + albums);
 		for (var a = 0; a < albums.length; a++) {
-			vRSS = 'https://gdata.youtube.com/feeds/api/playlists/' + albums[a].id + '?v=2&alt=jsonc&max-results=50\'); return false;';
+			vRSS = 'https://gdata.youtube.com/feeds/api/playlists/' + albums[a].id + '?v=2&alt=jsonc&max-results=50';
 			//vRSS = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Falbum%2F'+albums[a].id+'%2Fvideos.xml\'&format=json';
 			youtubeVideoJSON(vRSS,a);
 		}
@@ -965,7 +975,7 @@ function renderEntries(entries) {
     });
     $("#linksList").html(s);
     $("#linksList").listview("refresh");
-    $.mobile.hidePageLoadingMsg();
+    ///$.mobile.hidePageLoadingMsg();
 }
 $("#mainPage").on("pagebeforeshow", function(event,data) {
 	if(data.prevPage.length) {

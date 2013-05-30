@@ -193,7 +193,7 @@
 		  localStorage.wvbs_access_latest = getCurrentDate();
 	  }
 	  </script>
-      <script async>
+      <script>
 	  function refreshCache() {
 		  webSites();
 		  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
