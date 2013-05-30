@@ -161,7 +161,7 @@ function wvbsNews(renderNewsEntries)
 		  },
 		  error:function(jqXHR,status,error) {
 			if(status == 'timeout')
-				alert("connection timed-out, try again or check your internet connection.");
+				//alert("connection timed-out, try again or check your internet connection.");
 			//try to use cache
 			  if(localStorage["wvbs_news_entries"]) {
 				  //$("#webSitesArchiveStatus").html("Using cached version...");
@@ -211,7 +211,7 @@ function wvbsVideoCache(renderVideoCache)
 		  },
 		  error:function(jqXHR,status,error) {
 			if(status == 'timeout')
-				alert("connection timed-out, try again or check your internet connection.");
+				//alert("connection timed-out, try again or check your internet connection.");
 			//try to use cache
 			  if(localStorage["wvbs_news_entries"]) {
 				  //$("#webSitesArchiveStatus").html("Using cached version...");
@@ -283,7 +283,7 @@ function webSites(renderWebEntries) //use to be webSites()
 			  }
 		  },
 		  error:function(jqXHR,status,error) {
-			if(status == 'timeout') alert("connection timed-out, try again or check your internet connection.");
+			if(status == 'timeout') //alert("connection timed-out, try again or check your internet connection.");
 			//try to use cache
 			if (renderWebEntries && typeof(renderWebEntries) === "function") {
 				//renderWebEntries(entriesWeb);
@@ -380,7 +380,7 @@ function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 			  }
 		  },
 		  error:function(jqXHR,status,error) {
-			if(status == 'timeout') alert("connection timed-out, try again or check your internet connection.");
+			if(status == 'timeout') //alert("connection timed-out, try again or check your internet connection.");
 			//try to use cache
 			if (renderFBpageEntries && typeof(renderFBpageEntries) === "function") {
 				//renderFBpageEntries(entriesFBpage);
@@ -1089,6 +1089,15 @@ $("#videoArchive").live("pageshow", function(prepage) {
 	//Set the title
 	$("h1", this).text(entriesAlbum[selectedAlbumEntry].title);
 });
+
+$("#ytVideoArchive").live("pageshow", function(prepage) {
+	if ($('#ytArchiveVideosList li').length == 0) {
+		//Grab the last request and reload
+		
+	}
+});
+
+
 $("#videoPlayerPage").live("pageshow", function(prepage) {
 	//Set the title
 	$("h1", this).text(entries[selectedEntry].title);
