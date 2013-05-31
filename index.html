@@ -408,6 +408,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 	  <script>
 		$("#albumArchive").live("pageinit", function() {
 			$.mobile.hidePageLoadingMsg();
+			renderVimeoAlbumEntries('wvbs_video_vimeo_albums');
 		});
       </script>
       <div data-role="header" data-position="fixed">
@@ -439,12 +440,15 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 	  <script>
 		$("#videoArchive").live("pageinit", function() {
 		  if ($('#archiveVideosList li').length == 0) {
+			  /*
 			  if(localStorage["wvbs_video_vimeo_videos"]) {
 				  entriesVideo = JSON.parse(localStorage["wvbs_video_vimeo_videos"])
 				  renderVimeoEntries(entriesVideo);				
 			  } else {
 				  $("#videoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
 			  }
+			  */
+			  renderVimeoEntries('wvbs_video_vimeo_albums',selectedAlbumEntry)
 		  }
 		});
       </script>
@@ -481,6 +485,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 	  <script>
 		$("#ytAlbumArchive").live("pageinit", function() {
 			$.mobile.hidePageLoadingMsg();
+			renderYTAlbumEntries('wvbs_video_YT_albums');
 		});
       </script>
       <div data-role="header" data-position="fixed">
@@ -511,16 +516,13 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
     <div data-role="page" id="ytVideoArchive" class="bground" data-title="WVBS Online Video Collection" data-dom-cache="true">
 	  <script>
 		$("#ytVideoArchive").live("pageinit", function() {
-			//vimeoVideoJSON(' ','50');
-
-		if ($('#ytArchiveVideosList li').length == 0) {
-			if(localStorage["wvbs_video_YT_videos"]) {
-				entriesVideo = JSON.parse(localStorage["wvbs_video_YT_videos"])
-				renderYTEntries(entriesVideo);				
-			} else {
-				$("#ytVideoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
-			}
-		}
+		  if ($('#ytArchiveVideosList li').length == 0) {
+			  if(localStorage["wvbs_video_YT_videos"]) {
+				  renderYTEntries('wvbs_video_YT_albums',selectedAlbumEntry)
+			  } else {
+				  $("#ytVideoArchiveStatus").html("Sorry, we are unable to get the Video Archive List and there is no cache.");
+			  }
+		  }
 		});
       </script>
       <div data-role="header" data-position="fixed">
@@ -582,18 +584,11 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
   
   <div data-role="page" id="WVBS-Feed" class="bground" data-title="WVBS Product Feed" data-dom-cache="true">
-	  <!--
 	  <script>
 		$("#WVBS-Feed").live("pageinit", function() {
-			//wvbsJSON(' ','10');			
-			if(localStorage["currentEntries"]) {
-				currentEntries = JSON.parse(localStorage["currentEntries"]);
-				moreRSSurl = JSON.parse(localStorage["moreRSSurl"]);
-				wvbsJSON(moreRSSurl,'9',renderWVBSEntries);
-			}
+			renderWVBSEntries('wvbs_entries');
 		});
       </script>
-      -->
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1>WVBS Product Feed</h1>
@@ -624,19 +619,11 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
   </div>
 
   <div data-role="page" id="FacebookFeed" class="bground" data-title="WVBS Facebook Feed" data-dom-cache="true">
-<!--	  <script>
+	  <script>
 		$("#FacebookFeed").live("pageinit", function() {
-			if(localStorage["moreRSSurl"]) {
-				moreRSSurl = JSON.parse(localStorage["moreRSSurl"]);
-				//entriesFBnotes = JSON.parse(localStorage["entriesFBnotes"]);
-				//renderFBnotesEntries(entriesFBnotes);
-				//entriesFBpage = JSON.parse(localStorage["entriesFBpage"]);
-				//renderFBpageEntries(entriesFBpage);
-				facebookJSON(moreRSSurl,'50');
-			}
+			renderFBpageEntries('wvbs_entries');
 		});
       </script>
--->      
       <div data-role="header" data-position="fixed">
           <a href="#mainPage" data-rel="back">Back</a>
           <h1 class="title"></h1>

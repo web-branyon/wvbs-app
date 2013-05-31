@@ -27,7 +27,9 @@
   var entriesVideo = [];
   var selectedVideoEntry = "";
   var entriesAlbum = [];
-  var selectedAlbumEntry = "";
+  if (localStorage["wvbs_video_selected_album"]) { 
+  	var selectedAlbumEntry = localStorage["wvbs_video_selected_album"]; 
+  } else { var selectedAlbumEntry = ""; }
   var entriesYTAlbum = [];
   var moreRSSurl = "";
   var currentEntries = 0;
@@ -629,9 +631,10 @@ function renderVimeoAlbumEntries(calledVimeoAlbumList) {
 	localStorage["wvbs_entries"] = localStorage[calledVimeoAlbumList];
 }
 $(".albumLink").live("click", function() {
-	entries = entriesAlbum;
-	selectedEntry = $(this).data("entryid");
+	//entries = entriesAlbum;
+	//selectedEntry = $(this).data("entryid");
 	selectedAlbumEntry = $(this).data("entryid");
+	localStorage["wvbs_video_selected_album"] = JSON.stringify(selectedAlbumEntry);
 });
 function vimeoVideoJSON(vimeoRSSurl,entryIndex,callback) {
   if (callback && typeof(callback) === "function") {
@@ -1085,19 +1088,6 @@ $("#contentPage").live("pageshow", function(prepage) {
 	}
     $.mobile.hidePageLoadingMsg();	
 });
-$("#videoArchive").live("pageshow", function(prepage) {
-	//Set the title
-	$("h1", this).text(entriesAlbum[selectedAlbumEntry].title);
-});
-
-$("#ytVideoArchive").live("pageshow", function(prepage) {
-	if ($('#ytArchiveVideosList li').length == 0) {
-		//Grab the last request and reload
-		
-	}
-});
-
-
 $("#videoPlayerPage").live("pageshow", function(prepage) {
 	//Set the title
 	$("h1", this).text(entries[selectedEntry].title);
