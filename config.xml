@@ -36,7 +36,8 @@
 		<gap:splash src="images/splash-ipad-landscape.png" width="1024" height="768" />
 		<gap:splash src="images/splash-ipad-portrait-retina.png" width="1536" height="2008" />
 		<gap:splash src="images/splash-ipad-landscape-retina.png" width="2048" height="1496" />
-		<gap:splash src="images/splash.png" gap:platform="android" gap:density="hdpi" />
 		<gap:splash src="images/splash-iphone-hires.png" gap:platform="blackberry" />
 		<gap:splash src="images/splash.png" gap:platform="winphone" />
+		<gap:splash src="images/splash.png" gap:platform="android" gap:density="hdpi" />
+		<gap:splash src="images/splash.png" />
 	</widget>
