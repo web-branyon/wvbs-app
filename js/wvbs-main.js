@@ -714,7 +714,7 @@ function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
 		console.log(tempVideoList);
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
-			s += '<li><a class="videoLink" target="_blank" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+			s += '<li><a class="videoLink external" target="_blank" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
 		  //<a onclick="javascript:cacheVideo(' + v.id + ');">Save</a>
 		});
 		$("#archiveVideosList").html(s);
@@ -910,7 +910,7 @@ function renderYTEntries(calledYTVideoList,entryIndex) {
 		var tempVideoList = tempAlbumList[entryIndex].videos;
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
-			s += '<li><a class="videoLink" target="_blank" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+			s += '<li><a class="videoLink external" target="_blank" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
 		});
 		$("#ytArchiveVideosList").html(s);
 	} else {
@@ -1025,7 +1025,7 @@ $("#contentPage").live("pageshow", function(prepage) {
 	contentDescription = contentDescription.replace('<a ','<a target="_blank"');
 	contentHTML += contentDescription;
 	//Set the external site button link
-	contentHTML += '<p/><a target="_blank" href="'+entries[selectedEntry].link + '" id="externalEntryButton" data-role="button">'+readEntry+'</a>';
+	contentHTML += '<p/><a target="_blank" href="'+entries[selectedEntry].link + '" class="external" id="externalEntryButton" data-role="button">'+readEntry+'</a>';
 	contentHTML = contentHTML.replace('cache/1/thumbnail/75x75/9df78eab33525d08d6e5fb8d27136e95/','');
 	contentHTML = contentHTML.replace('height="75"','height="150"');
 	contentHTML = contentHTML.replace('width="75"','width="150" style="padding:0px 20px 20px 0px;"');
