@@ -301,7 +301,7 @@ function renderWebEntries() {
 		var s = '';
 		s += '<li data-role="list-divider" data-theme="b">Specific Video Websites</li>';
 		$.each(entriesWeb, function(i, v) {
-			s += '<li><a href="' + v.link + '" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="100" style="padding: 10px 0px;" /><h3>' + v.title + '</h3><p style="text-decoration:underline;"><strong>' + v.link + '</strong></p></a></li>';
+			s += '<li><a href="' + v.link + '" class="contentLink" target="_system" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="100" style="padding: 10px 0px;" /><h3>' + v.title + '</h3><p style="text-decoration:underline;"><strong>' + v.link + '</strong></p></a></li>';
 		   //s += '<li><a href="#WVBS-Feed" class="contentLink" data-entryid="'+i+'"><img src="' + v.thumbnail + '" width="50" height="50" />' + v.title + '</a></li>';
 		});
 	} else {
