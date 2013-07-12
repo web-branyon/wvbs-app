@@ -10,15 +10,17 @@
 		<preference name="webviewbounce" value="true" />
 		<preference name="prerendered-icon" value="true" />
 		<preference name="stay-in-webview" value="false" />
+		<preference name="detect-data-types" value="true" />		
 		<preference name="ios-statusbarstyle" value="default" />
 		<preference name="disable-cursor" value="true" />
 		<preference name="android-minSdkVersion" value="7" />
 		<preference name="android-installLocation" value="auto" />
 		<feature name="http://api.phonegap.com/1.0/file"/>
-		<icon src="images/wvbs-icon-57.png" gap:platform="ios" width="57" height="57" />
-		<icon src="images/wvbs-icon-72.png" gap:platform="ios" width="72" height="72" />
-		<icon src="images/wvbs-icon-114.png" gap:platform="ios" width="114" height="114" />
-		<icon src="images/wvbs-icon-144.png" gap:platform="ios" width="144" height="144" />
+		<icon src="images/wvbs-icon-ios-57.png" gap:platform="ios" width="57" height="57" />
+		<icon src="images/wvbs-icon-ios-72.png" gap:platform="ios" width="72" height="72" />
+		<icon src="images/wvbs-icon-ios-114.png" gap:platform="ios" width="114" height="114" />
+		<icon src="images/wvbs-icon-ios-144.png" gap:platform="ios" width="144" height="144" />
+		<icon src="images/wvbs-icon-ios-512.png" gap:platform="ios" width="512" height="512" />
 		<icon src="images/wvbs-icon-36.png" gap:platform="android" gap:density="ldpi" />
 		<icon src="images/wvbs-icon-48.png" gap:platform="android" gap:density="mdpi" />
 		<icon src="images/wvbs-icon-72.png" gap:platform="android" gap:density="hdpi" />

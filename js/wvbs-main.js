@@ -182,7 +182,7 @@ function renderNewsEntries(entriesNews) {
     entries = entriesNews;
     var s = '';
     $.each(entries, function(i, v) {
-        s += '<div data-entryid="'+i+'">' + v.description + '</div>';
+        s += '<li data-entryid="'+i+'">' + v.description + '</li>';
 		//console.log(entriesNews[i].description);
     });
     $('#newsMessages').html(s);
@@ -714,7 +714,7 @@ function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
 		console.log(tempVideoList);
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
-			s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+			s += '<li><a class="videoLink" target="_blank" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
 		  //<a onclick="javascript:cacheVideo(' + v.id + ');">Save</a>
 		});
 		$("#archiveVideosList").html(s);
@@ -910,7 +910,7 @@ function renderYTEntries(calledYTVideoList,entryIndex) {
 		var tempVideoList = tempAlbumList[entryIndex].videos;
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
-			s += '<li><a class="videoLink" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+			s += '<li><a class="videoLink" target="_blank" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'" target="_blank"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
 		});
 		$("#ytArchiveVideosList").html(s);
 	} else {

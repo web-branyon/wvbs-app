@@ -194,7 +194,7 @@
 	  }
 	  </script>
       <script>
-	  function refreshCache() {
+	  function refreshCache(updated) {
 		  webSites();
 		  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
 		  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
@@ -206,6 +206,12 @@
 		  wvbsNews(renderNewsEntries);
 		  mergeVimeoVideosAndAlbums();
 		  mergeYTVideosAndAlbums();
+		  if (updated) {
+			  //$.mobile.showPageLoadingMsg("a","Loading...");
+			  console.log(updated);
+			  //alert(updated);
+			  $("#refreshDataLink").click();
+		  }
 	  }
 	  refreshCache();
     </script>
@@ -281,8 +287,8 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
     </style>
     <div id="newsDIV" class="content ui-content .ui-overlay-shadow ui-corner-all ui-body-c keepcentered" style="background-color:white; margin-top: 1px; display:none;">
       <a href="#" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right " style="float:right; top: -15px; right:-14px; margin: 0; z-index: 1101;" onClick="javascript:closeNewsBox();">Close</a>
-      <div id="newsMessages">
-      </div>
+      <div style="text-align:center;"><span style="background-color:yellow;"><strong>&nbsp;Latest News from WVBS&nbsp;</strong></span></div>
+      <ul id="newsMessages"></ul>
     </div>
 
     <div id="logoDIV" style="margin:0 auto; text-align:center;">
@@ -326,13 +332,20 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
     <div id="mainPageFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
       <div data-role="navbar" data-iconpos="top" data-theme="c" >
           <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
-                <li><a href="javascript:showLoader(); refreshCache();" data-icon="refresh">Refresh Data</a></li>
+                <li><a href="javascript:showLoader(); refreshCache('Data Refreshed');" data-icon="refresh">Refresh Data</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
           </ul>
+          <a id="refreshDataLink" style="display:none;" href="#refreshDialog" data-role="button" data-rel="dialog" data-position-to="window" data-inline="true" data-transition="slideup"></a>
       </div><!-- /navbar -->
     </div>
+  </div>
+  <div data-role="dialog" id="refreshDialog" data-theme="b" data-overlay-theme="a">
+      <div data-role="content" style="text-align:center;" >
+          <h3 style="color:black;">Data Refreshed.</h3>
+          <a href="index.html" data-role="button" data-rel="back" data-theme="e" data-transition="slidedown">Dismiss</a>    
+      </div>
   </div>
   <div data-role="dialog" id="iPhoneDialog" data-theme="b">
       <div data-role="content" style="text-align:center;" >
@@ -396,7 +409,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="webSitesArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -428,7 +441,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="albumArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -471,7 +484,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="videoArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -505,7 +518,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="ytAlbumArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -542,7 +555,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="ytVideoArchiveFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -575,7 +588,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="videoPlayerPageFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -610,7 +623,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="WVBS-FeedFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -657,7 +670,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="FacebookFeedFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -683,7 +696,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="contentPageFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
@@ -706,7 +719,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div id="videoPageFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
         <div data-role="navbar" data-iconpos="top" data-theme="c" >
             <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
             </ul>
