@@ -107,6 +107,7 @@
 		  document.addEventListener('menubutton', function(){
 			  onMenuShow();
 		  });
+		  navigator.splashscreen.hide();
 		  //checkConnection();
 		  //window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFSSuccess, null);    
 	  }
@@ -337,7 +338,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
     <div id="mainPageFooter" data-role="footer" data-position="fixed" data-theme="c" style="display:none;">
       <div data-role="navbar" data-iconpos="top" data-theme="c" >
           <ul>
-                <li><a href="http://www.wvbs.org/index.php/aboutus" target="_blank" data-icon="info" >About WVBS</a></li>
+                <li><a href="http://www.wvbs.org/index.php/aboutus" class="external" target="_blank" data-icon="info" >About WVBS</a></li>
                 <li><a href="#contact" data-icon="star" data-transition="slideup">Contact Us</a></li>
                 <li><a href="javascript:showLoader(); refreshCache('Data Refreshed');" data-icon="refresh">Refresh Data</a></li>
                 <li><a href="javascript:onMenuShow();" data-icon="arrow-d">Done</a></li>
@@ -756,7 +757,7 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
       <div data-role="content" >
           <h3 style="color:black;">Contact WVBS</h3>
           <p><a id="phoneLink" href="tel:5123985211" data-role="button" data-theme="a" >Phone: 512-398-5211</a></p>
-          <a href="mailto:biblestudy@wvbs.org?subject=Question/Comment for WVBS from Web App" rel="external" class="external" data-role="button" data-rel="dialog" data-theme="a" >Email</a> 
+          <a href="mailto:biblestudy@wvbs.org?subject=Question/Comment for WVBS from Web App" rel="external" class="external" data-role="button" data-rel="dialog" data-theme="d" >Email</a> 
           <a href="index.html" data-role="button" data-rel="back" data-theme="e" data-transition="slidedown">Cancel</a>    
       </div>
   </div>
