@@ -1,41 +1,41 @@
 //Title of the blog
-  var TITLE = "WVBS Web App";
+var TITLE = "WVBS Web App";
 //RSS url
-  var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//www.wvbs.org/mobile/wvbs-app.rss%27";
-  var infoRSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=json"
-//  var vimeoInfo = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//vimeo.com/api/v2/wvbs/info.xml%27";
+var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//www.wvbs.org/mobile/wvbs-app.rss%27";
+var infoRSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=json";
+//var vimeoInfo = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//vimeo.com/api/v2/wvbs/info.xml%27";
 
 //Stores entries
-  var entries = [];
-  var selectedEntry = "";
-  //var entriesFBnotes = [];
-  //var selectedFBnotesEntry = "";
-  var entriesFBpage = [];
-  var selectedFBpageEntry = "";
+var entries = [];
+var selectedEntry = "";
+//var entriesFBnotes = [];
+//var selectedFBnotesEntry = "";
+var entriesFBpage = [];
+var selectedFBpageEntry = "";
 
-  var wvbsFBentries = [];
-  var selectedWVBSFBpageEntry = "";
-  var sftFBentries = [];
-  var selectedSFTFBpageEntry = "";
-  var boundFBentries = [];
-  var selectedBoundFBpageEntry = "";
+var wvbsFBentries = [];
+var selectedWVBSFBpageEntry = "";
+var sftFBentries = [];
+var selectedSFTFBpageEntry = "";
+var boundFBentries = [];
+var selectedBoundFBpageEntry = "";
 
-  var entriesWeb = [];
-  var selectedWebEntry = "";
-  var entriesWVBS = [];
-  var selectedWVBSEntry = "";
-  var entriesVideo = [];
-  var selectedVideoEntry = "";
-  var entriesAlbum = [];
-  if (localStorage["wvbs_video_selected_album"]) { 
-  	var selectedAlbumEntry = localStorage["wvbs_video_selected_album"]; 
-  } else { var selectedAlbumEntry = ""; }
-  var entriesYTAlbum = [];
-  var moreRSSurl = "";
-  var currentEntries = 0;
-  var json = "";
-  var readEntry = "Read More";
-  var t = "";
+var entriesWeb = [];
+var selectedWebEntry = "";
+var entriesWVBS = [];
+var selectedWVBSEntry = "";
+var entriesVideo = [];
+var selectedVideoEntry = "";
+var entriesAlbum = [];
+if (localStorage["wvbs_video_selected_album"]) {
+    var selectedAlbumEntry = localStorage["wvbs_video_selected_album"];
+} else { var selectedAlbumEntry = ""; }
+var entriesYTAlbum = [];
+var moreRSSurl = "";
+var currentEntries = 0;
+var json = "";
+var readEntry = "Read More";
+var t = "";
   
 function showLoader() {
   $.mobile.showPageLoadingMsg("a","Loading...");
@@ -123,31 +123,31 @@ function renderWebEntries(entriesWeb) {
 */
 $.ajaxSetup({
     timeout: 5000, // milliseconds
-	error: function(request, status, maybe_an_exception_object) {
-        if(status == 'timeout')
+	error: function (request, status, maybe_an_exception_object) {
+        if (status === 'timeout') {
             alert("connection timed-out, try again when an internet connection is available.");
+        }
     }
 });
 function appUpdated(incomingDate) {
-  //$.mobile.showPageLoadingMsg("e","Updating...");
-  var serviceDate = new Date(incomingDate);
-  var accessDate = new Date(localStorage.wvbs_access_previous);
-  if (serviceDate.getTime() <= accessDate.getTime())
-  {
-	  return(true);
-  }
-  else { return (false); }
+    //$.mobile.showPageLoadingMsg("e","Updating...");
+    var serviceDate = new Date(incomingDate);
+    var accessDate = new Date(localStorage.wvbs_access_previous);
+    if (serviceDate.getTime() <= accessDate.getTime()) {
+        return (true);
+    } else {
+        return (false);
+    }
 }
-function wvbsNews(renderNewsEntries)
-{
+function wvbsNews(renderNewsEntries) {
 	  $.ajax({
-		  type: "GET",
-		  url:RSS,
-		  timeout: 5000, // milliseconds
-		  success:function(res,code) {
-			  entriesNews = [];
-			  var xmlWeb = $(res);
-			  var itemsWeb = xmlWeb.find("news");
+          type: "GET",
+          url:RSS,
+          timeout: 5000, // milliseconds
+          success:function(res,code) {
+              entriesNews = [];
+              var xmlWeb = $(res);
+              var itemsWeb = xmlWeb.find("news");
 			  $.each(itemsWeb, function(i, v) {
 				  entry = { 
 					  description:$(v).find("description").text(),
@@ -945,16 +945,26 @@ function renderVimeoEntries(entriesVideo) {
     $("#archiveVideosList").listview("refresh");
 	$.mobile.hidePageLoadingMsg();
 }
-function renderVideoPage(vimeoID) {
-    var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + vimeoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
-	var disclaimer = 'In versions of Android prior to 3.1, the video player will load but may not play. <br>If you are having trouble playing the video above, then you can still watch the video <a id="videoPlayerLink" href="http://wvbs.org/video/player.php?v=' + vimeoID + '" >HERE</a>.';
-    $("#videoWrapper").html(video);
-	$("#videoDisclaimer").html(disclaimer);
-	window.location.hash = '#videoPlayerPage';
+*/
+
+function renderVideoPage(service, videoID) {
+    if ( service === "youtube" ) {
+        var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
+        $("#videoWrapper").html(video);
+    }
+    else if ( service === "vimeo" ) {
+        var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
+        $("#videoWrapper").html(video);
+    }
+    else {
+        var disclaimer = 'In versions of Android prior to 3.1, the video player will load but may not play. <br>If you are having trouble playing the video above, then you can still watch the video <a id="videoPlayerLink" href="http://wvbs.org/video/player.php?v=' + videoID + '" >HERE</a>.';
+        $("#videoDisclaimer").html(disclaimer);
+    }
+    window.location.hash = '#videoPlayerPage';
 	$.mobile.hidePageLoadingMsg();
 }
-################################################################
-*/
+
+//################################################################
 $(".videoLink").live("click", function() {
 	entries = entriesVideo;
 	selectedEntry = $(this).data("entryid");
