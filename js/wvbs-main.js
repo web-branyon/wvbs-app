@@ -954,32 +954,42 @@ function renderVimeoEntries(entriesVideo) {
 */
 
 function renderVideoPage(service, videoID, entryID) {
-    if ( service === "youtube" ) {
-       	if(localStorage["wvbs_video_YT_albums"]) {
-			albumEntries = JSON.parse(localStorage["wvbs_video_YT_albums"]);
-			selectedAlbum = JSON.parse(localStorage["wvbs_video_selected_album"]);
-			$("#videoPlayerPage h1").text(albumEntries[selectedAlbum].videos[entryID].title);
-		} else {
-			$("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
-		}
-		var video = '<iframe id="videoPlayer" src="http://www.youtube.com/embed/' + videoID + '?rel=0" width="960" height="540" frameborder="0" webkitallowfullscreen="" allowfullscreen=""></iframe>';
-        $("#videoWrapper").html(video);
-    }
-    else if ( service === "vimeo" ) {
-       	if(localStorage["wvbs_video_vimeo_albums"]) {
-			albumEntries = JSON.parse(localStorage["wvbs_video_vimeo_albums"]);
-			selectedAlbum = JSON.parse(localStorage["wvbs_video_selected_album"]);
-			$("#videoPlayerPage h1").text(albumEntries[selectedAlbum].videos[entryID].title);
-		} else {
-			$("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
-		}
-        var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
-        $("#videoWrapper").html(video);
-    }
-    else {
-        var disclaimer = 'In versions of Android prior to 3.1, the video player will load but may not play. <br>If you are having trouble playing the video above, then you can still watch the video <a id="videoPlayerLink" href="http://wvbs.org/video/player.php?v=' + videoID + '" >HERE</a>.';
-        $("#videoDisclaimer").html(disclaimer);
-    }
+	var ua = navigator.userAgent;
+	var serviceID = "v";
+	if( ua.indexOf("Android") >= 0 )
+	{
+	  var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8)); 
+	  if (androidversion < 3.1)
+	  {
+		  if ( service === "youtube" ) { serviceID = "yt"; }
+		  var disclaimer = 'In versions of Android prior to 3.1, the video player will load but may not play. <br>If you are having trouble playing the video above, then you can still watch the video <a id="videoPlayerLink" href="http://wvbs.org/video/player.php?' + serviceID + '=' + videoID + '" >HERE</a>.';
+		  $("#videoDisclaimer").html(disclaimer);
+	  }
+	}
+	else {
+	  if ( service === "youtube" ) {
+		  if(localStorage["wvbs_video_YT_albums"]) {
+			  albumEntries = JSON.parse(localStorage["wvbs_video_YT_albums"]);
+			  selectedAlbum = JSON.parse(localStorage["wvbs_video_selected_album"]);
+			  $("#videoPlayerPage h1").text(albumEntries[selectedAlbum].videos[entryID].title);
+		  } else {
+			  $("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
+		  }
+		  var video = '<iframe id="videoPlayer" src="http://www.youtube.com/embed/' + videoID + '?rel=0" width="960" height="540" frameborder="0" webkitallowfullscreen="" allowfullscreen=""></iframe>';
+		  $("#videoWrapper").html(video);
+	  }
+	  else if ( service === "vimeo" ) {
+		  if(localStorage["wvbs_video_vimeo_albums"]) {
+			  albumEntries = JSON.parse(localStorage["wvbs_video_vimeo_albums"]);
+			  selectedAlbum = JSON.parse(localStorage["wvbs_video_selected_album"]);
+			  $("#videoPlayerPage h1").text(albumEntries[selectedAlbum].videos[entryID].title);
+		  } else {
+			  $("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
+		  }
+		  var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
+		  $("#videoWrapper").html(video);
+	  }
+	}
     window.location.hash = '#videoPlayerPage';
 	$.mobile.hidePageLoadingMsg();
 }
