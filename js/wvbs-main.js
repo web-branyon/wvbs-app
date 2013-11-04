@@ -956,6 +956,7 @@ function renderVimeoEntries(entriesVideo) {
 function renderVideoPage(service, videoID, entryID) {
 	var ua = navigator.userAgent;
 	var serviceID = "v";
+	/*
 	if( ua.indexOf("Android") >= 0 )
 	{
 	  var androidversion = parseFloat(ua.slice(ua.indexOf("Android")+8)); 
@@ -967,6 +968,7 @@ function renderVideoPage(service, videoID, entryID) {
 	  }
 	}
 	else {
+	*/	
 	  if ( service === "youtube" ) {
 		  if(localStorage["wvbs_video_YT_albums"]) {
 			  albumEntries = JSON.parse(localStorage["wvbs_video_YT_albums"]);
@@ -989,7 +991,7 @@ function renderVideoPage(service, videoID, entryID) {
 		  var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
 		  $("#videoWrapper").html(video);
 	  }
-	}
+	//}
     window.location.hash = '#videoPlayerPage';
 	$.mobile.hidePageLoadingMsg();
 }
