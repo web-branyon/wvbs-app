@@ -714,8 +714,11 @@ function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
 		console.log(tempVideoList);
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
+			s += '<li><a class="videoLink" target="_blank" onclick="javascript:renderVideoPage(\'vimeo\',\'' + v.id + '\',\'' + i + '\'); return false;" href="#" class="contentLink" data-entryid="'+i+'"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';		
+			/*WORKING CODE FOR EXTERNAL PLAYER PAGE
 			s += '<li><a class="videoLink external" target="_blank" href="http://www.wvbs.org/video/player.php?v=' + v.id + '" class="contentLink" data-entryid="'+i+'"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
-		  //<a onclick="javascript:cacheVideo(' + v.id + ');">Save</a>
+		    //<a onclick="javascript:cacheVideo(' + v.id + ');">Save</a>
+		    */
 		});
 		$("#archiveVideosList").html(s);
 	} else {
@@ -879,7 +882,7 @@ function youtubeVideoJSON(youtubeJSONurl,entryIndex,callback) {
 			}
 			//store entries
 			entriesVideo = sortByKey(entriesVideo,'date');
-			localStorage["wvbs_video_YT_videos"] = JSON.stringify(entriesVideo);
+			//localStorage["wvbs_video_YT_videos"] = JSON.stringify(entriesVideo);
 			albums = JSON.parse(localStorage["wvbs_video_YT_albums"]);
 			albums[entryIndex].videos = entriesVideo;
 			localStorage["wvbs_video_YT_albums"] = JSON.stringify(albums);
@@ -910,7 +913,10 @@ function renderYTEntries(calledYTVideoList,entryIndex) {
 		var tempVideoList = tempAlbumList[entryIndex].videos;
 		var s = '';
 		$.each(tempVideoList, function(i, v) {
+			s += '<li><a class="videoLink" target="_blank" onclick="javascript:renderVideoPage(\'youtube\',\'' + v.id + '\',\'' + i + '\'); return false;" href="#" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+			/*WORKING CODE FOR EXTERNAL PLAYER
 			s += '<li><a class="videoLink external" target="_blank" href="http://www.wvbs.org/video/player.php?yt=' + v.id + '" class="contentLink" data-entryid="'+i+'"><h3>' + v.title + '</h3><p style="margin-right:10px;">uploaded: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.duration + ' min</p></a></li>';
+			*/
 		});
 		$("#ytArchiveVideosList").html(s);
 	} else {
@@ -947,12 +953,26 @@ function renderVimeoEntries(entriesVideo) {
 }
 */
 
-function renderVideoPage(service, videoID) {
+function renderVideoPage(service, videoID, entryID) {
     if ( service === "youtube" ) {
-        var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
+       	if(localStorage["wvbs_video_YT_albums"]) {
+			albumEntries = JSON.parse(localStorage["wvbs_video_YT_albums"]);
+			selectedAlbum = JSON.parse(localStorage["wvbs_video_selected_album"]);
+			$("#videoPlayerPage h1").text(albumEntries[selectedAlbum].videos[entryID].title);
+		} else {
+			$("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
+		}
+		var video = '<iframe id="videoPlayer" src="http://www.youtube.com/embed/' + videoID + '?rel=0" width="960" height="540" frameborder="0" webkitallowfullscreen="" allowfullscreen=""></iframe>';
         $("#videoWrapper").html(video);
     }
     else if ( service === "vimeo" ) {
+       	if(localStorage["wvbs_video_vimeo_albums"]) {
+			albumEntries = JSON.parse(localStorage["wvbs_video_vimeo_albums"]);
+			selectedAlbum = JSON.parse(localStorage["wvbs_video_selected_album"]);
+			$("#videoPlayerPage h1").text(albumEntries[selectedAlbum].videos[entryID].title);
+		} else {
+			$("#contentPageStatus").html("Sorry, we are unable to get the Item Information and there is no cache.");
+		}
         var video = '<iframe id="videoPlayer" src="http://player.vimeo.com/video/' + videoID + '?title=0&amp;byline=0&amp;portrait=0" width="960" height="540" frameborder="0" webkitAllowFullScreen allowFullScreen ></iframe>';
         $("#videoWrapper").html(video);
     }
@@ -1100,7 +1120,7 @@ $("#contentPage").live("pageshow", function(prepage) {
 });
 $("#videoPlayerPage").live("pageshow", function(prepage) {
 	//Set the title
-	$("h1", this).text(entries[selectedEntry].title);
+	//$("h1", this).text(albumEntries[selectedAlbum].videos);
 });
 $("#webSitesArchive").live("pageshow", function(prepage) {
 	//webSites(renderWebEntries);
