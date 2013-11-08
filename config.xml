@@ -15,7 +15,7 @@
 		<preference name="disable-cursor" value="true" />
 		<preference name="android-minSdkVersion" value="7" />
 		<preference name="android-installLocation" value="auto" />
-		<gap:plugin name="com.phonegap.plugins.inappbrowser" />
+		<gap:plugin name="org.apache.cordova.inappbrowser" />
 		<feature name="http://api.phonegap.com/1.0/file"/>
 		<icon src="images/wvbs-icon-ios-57.png" gap:platform="ios" width="57" height="57" />
 		<icon src="images/wvbs-icon-ios-72.png" gap:platform="ios" width="72" height="72" />
