@@ -202,21 +202,43 @@
       <script>
 	  function refreshCache(updated) {
 		  webSites();
-		  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
-		  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
-		  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9');
-		  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9');
-		  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json');
-		  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json');
-		  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json');
+		  refreshVimeoCache();
+		  refreshYTCache();
+	      refreshWVBSCache();
+		  refreshFacebookCache();
 		  wvbsNews(renderNewsEntries);
 		  mergeVimeoVideosAndAlbums();
 		  mergeYTVideosAndAlbums();
 		  if (updated) {
 			  //$.mobile.showPageLoadingMsg("a","Loading...");
-			  console.log(updated);
-			  //alert(updated);
+			  //console.log(updated);
 			  $("#refreshDataLink").click();
+		  }
+	  }
+	  function refreshVimeoCache() {
+		  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
+	  }
+	  function refreshYTCache() {
+		  		  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
+	  }
+	  function refreshWVBSCache(renderWVBSEntries) {
+		  if (renderWVBSEntries && typeof(renderWVBSEntries) === "function") {
+			  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9',renderWVBSEntries);
+			  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9',renderWVBSEntries);
+		  } else {
+			  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fnew%2Fstore_id%2F1%2F\'&format=json','9');
+			  wvbsJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.wvbs.org%2Findex.php%2Frss%2Fcatalog%2Fspecial%2Fstore_id%2F1%2Fcid%2F0%2F\'&format=json','9');
+		  }
+	  }
+	  function refreshFacebookCache(renderFBpageEntries) {
+		  if (renderFBpageEntries && typeof(renderFBpageEntries) === "function") {
+			  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json',renderFBpageEntries);
+			  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json',renderFBpageEntries);
+			  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json',renderFBpageEntries);
+		  } else {
+			  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273296449735%26viewer%3D0%26key%3DAWjBgXBubehsmqJR%26format%3Drss20\'&format=json');
+			  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D273848047478%26key%3DAWh_hhcZ46ZlHld7%26format%3Drss20\'&format=json');
+			  facebookJSON('http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20feed%20WHERE%20url%3D\'http%3A%2F%2Fwww.facebook.com%2Ffeeds%2Fpage.php%3Fid%3D312760610126%26key%3DAWhJlsxmSBSUs4JS%26format%3Drss20\'&format=json');
 		  }
 	  }
 	  refreshCache();

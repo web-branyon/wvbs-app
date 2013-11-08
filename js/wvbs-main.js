@@ -1,5 +1,5 @@
 //Title of the blog
-var TITLE = "WVBS Web App";
+var TITLE = "WVBS App";
 //RSS url
 var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//www.wvbs.org/mobile/wvbs-app.rss%27";
 var infoRSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=json";
@@ -36,6 +36,7 @@ var currentEntries = 0;
 var json = "";
 var readEntry = "Read More";
 var t = "";
+var retry = "true";
   
 function showLoader() {
   $.mobile.showPageLoadingMsg("a","Loading...");
@@ -392,6 +393,7 @@ function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 	  });
 }
 function renderFBpageEntries(calledFBpage) {
+	var retry = true;
 	if(localStorage[calledFBpage]) {
 		var tempFBentries = JSON.parse(localStorage[calledFBpage])
 		var s = '';
@@ -400,8 +402,14 @@ function renderFBpageEntries(calledFBpage) {
 		});
 		$("#linksFBpageList").html(s);
 		localStorage["wvbs_entries"] = localStorage[calledFBpage];
+	} else if (retry) {
+		refreshFacebookCache();
+		retry = false;
+		renderFBpageEntries(calledFBpage);
 	} else {
 		$("#FacebookFeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
+		var s = '';
+		$("#linksFBpageList").html(s);
 	}
 	window.location.hash = '#FacebookFeed';
     $("#linksFBpageList").listview("refresh");
@@ -529,6 +537,10 @@ function renderWVBSEntries(calledWVBSList) {
 		$("#wvbsMoreFeed .ui-btn-text").text("More ...");	
 		$("#wvbslinksList").html(s);
 		localStorage["wvbs_entries"] = localStorage[calledWVBSList]
+	} else if (retry == "true") {
+		refreshWVBSCache(renderWVBSEntries);
+		retry = "false";
+		console.log(retry);
 	} else {
 		$("#WVBS-FeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -614,6 +626,7 @@ function vimeoAlbumJSON(vimeoXMLurl,numEntries,renderVimeoAlbumEntries) {
 	});
 }
 function renderVimeoAlbumEntries(calledVimeoAlbumList) {
+  var retry = true;
   if(localStorage[calledVimeoAlbumList]) {
 	  mergeVimeoVideosAndAlbums();
 	  var tempVimeoList = JSON.parse(localStorage[calledVimeoAlbumList]);
@@ -622,6 +635,10 @@ function renderVimeoAlbumEntries(calledVimeoAlbumList) {
 		  s += '<li><a class="albumLink" href="#" onclick="javascript:renderVimeoEntries(\'wvbs_video_vimeo_albums\',' + i + '); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 	  });
     $("#archiveAlbumsList").html(s);
+	} else if (retry) {
+		refreshVideoCache();
+		retry = false;
+		renderVimeoAlbumEntries(calledVimeoAlbumList);
 	} else {
 		$("#albumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -708,6 +725,7 @@ function vimeoVideoJSON(vimeoRSSurl,entryIndex,callback) {
 	});
 }
 function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
+	var retry = true;
 	if(localStorage[calledVimeoVideoList]) {
 		var tempAlbumList = JSON.parse(localStorage[calledVimeoVideoList]);
 		var tempVideoList = tempAlbumList[entryIndex].videos;
@@ -721,6 +739,10 @@ function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
 		    */
 		});
 		$("#archiveVideosList").html(s);
+	} else if (retry) {
+		refreshVideoCache();
+		retry = false;
+		renderVimeoEntries(calledVimeoVideoList,entryIndex);
 	} else {
 		  $("#albumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}	  
@@ -811,6 +833,7 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 	});
 }
 function renderYTAlbumEntries(calledYTAlbumList) {
+	var retry = true;
 	if(localStorage[calledYTAlbumList]) {
 		mergeYTVideosAndAlbums();
 		var tempYTList = JSON.parse(localStorage[calledYTAlbumList]);
@@ -819,6 +842,10 @@ function renderYTAlbumEntries(calledYTAlbumList) {
 		  s += '<li><a class="albumLink" href="#" onclick="javascript:renderYTEntries(\'wvbs_video_YT_albums\',' + i + '); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 		});
 	  $("#ytArchiveAlbumsList").html(s);
+	} else if (retry) {
+		refreshVideoCache();
+		retry = false;
+		renderYTAlbumEntries(calledYTAlbumList);
 	} else {
 		$("#ytAlbumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -907,7 +934,7 @@ function youtubeVideoJSON(youtubeJSONurl,entryIndex,callback) {
 	});
 }
 function renderYTEntries(calledYTVideoList,entryIndex) {
-	console.log(calledYTVideoList + ", " + entryIndex);
+	var retry = true;
 	if(localStorage[calledYTVideoList]) {
 		var tempAlbumList = JSON.parse(localStorage[calledYTVideoList]);
 		var tempVideoList = tempAlbumList[entryIndex].videos;
@@ -919,6 +946,10 @@ function renderYTEntries(calledYTVideoList,entryIndex) {
 			*/
 		});
 		$("#ytArchiveVideosList").html(s);
+	} else if (retry) {
+		refreshVideoCache();
+		retry = false;
+		renderYTEntries(calledYTVideoList,entryIndex);
 	} else {
 		  $("#ytAlbumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}	  
