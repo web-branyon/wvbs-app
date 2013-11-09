@@ -215,11 +215,19 @@
 			  $("#refreshDataLink").click();
 		  }
 	  }
-	  function refreshVimeoCache() {
-		  vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
+	  function refreshVimeoCache(renderVimeoAlbumEntries) {
+		  if (renderVimeoAlbumEntries && typeof(renderVimeoAlbumEntries) === "function") {
+              vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50',renderVimeoAlbumEntries);
+          } else {
+              vimeoAlbumJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D\'http%3A%2F%2Fvimeo.com%2Fapi%2Fv2%2Fwvbs%2Falbums.xml\'&format=json','50');
+          }          
 	  }
-	  function refreshYTCache() {
-		  		  youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
+	  function refreshYTCache(renderYTAlbumEntries) {
+		  if (renderYTAlbumEntries && typeof(renderYTAlbumEntries) === "function") {
+              youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc',renderYTAlbumEntries);
+          } else {
+              youtubeAlbumJSON('http://gdata.youtube.com/feeds/api/users/worldvbs/playlists?v=2&max-results=50&alt=jsonc');
+          }
 	  }
 	  function refreshWVBSCache(renderWVBSEntries) {
 		  if (renderWVBSEntries && typeof(renderWVBSEntries) === "function") {

@@ -393,7 +393,6 @@ function facebookJSON(fbPageRSSurl,renderFBpageEntries) {
 	  });
 }
 function renderFBpageEntries(calledFBpage) {
-	var retry = true;
 	if(localStorage[calledFBpage]) {
 		var tempFBentries = JSON.parse(localStorage[calledFBpage])
 		var s = '';
@@ -402,10 +401,9 @@ function renderFBpageEntries(calledFBpage) {
 		});
 		$("#linksFBpageList").html(s);
 		localStorage["wvbs_entries"] = localStorage[calledFBpage];
-	} else if (retry) {
-		refreshFacebookCache();
-		retry = false;
-		renderFBpageEntries(calledFBpage);
+	} else if (retry == "true") {
+		refreshFacebookCache(renderFBpageEntries);
+		retry = "false";
 	} else {
 		$("#FacebookFeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 		var s = '';
@@ -540,7 +538,6 @@ function renderWVBSEntries(calledWVBSList) {
 	} else if (retry == "true") {
 		refreshWVBSCache(renderWVBSEntries);
 		retry = "false";
-		console.log(retry);
 	} else {
 		$("#WVBS-FeedStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -626,7 +623,6 @@ function vimeoAlbumJSON(vimeoXMLurl,numEntries,renderVimeoAlbumEntries) {
 	});
 }
 function renderVimeoAlbumEntries(calledVimeoAlbumList) {
-  var retry = true;
   if(localStorage[calledVimeoAlbumList]) {
 	  mergeVimeoVideosAndAlbums();
 	  var tempVimeoList = JSON.parse(localStorage[calledVimeoAlbumList]);
@@ -635,10 +631,9 @@ function renderVimeoAlbumEntries(calledVimeoAlbumList) {
 		  s += '<li><a class="albumLink" href="#" onclick="javascript:renderVimeoEntries(\'wvbs_video_vimeo_albums\',' + i + '); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 	  });
     $("#archiveAlbumsList").html(s);
-	} else if (retry) {
-		refreshVideoCache();
-		retry = false;
-		renderVimeoAlbumEntries(calledVimeoAlbumList);
+	} else if (retry == "true") {
+		refreshVimeoCache(renderVimeoAlbumEntries);
+		retry = "false";
 	} else {
 		$("#albumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -725,7 +720,6 @@ function vimeoVideoJSON(vimeoRSSurl,entryIndex,callback) {
 	});
 }
 function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
-	var retry = true;
 	if(localStorage[calledVimeoVideoList]) {
 		var tempAlbumList = JSON.parse(localStorage[calledVimeoVideoList]);
 		var tempVideoList = tempAlbumList[entryIndex].videos;
@@ -739,10 +733,6 @@ function renderVimeoEntries(calledVimeoVideoList,entryIndex) {
 		    */
 		});
 		$("#archiveVideosList").html(s);
-	} else if (retry) {
-		refreshVideoCache();
-		retry = false;
-		renderVimeoEntries(calledVimeoVideoList,entryIndex);
 	} else {
 		  $("#albumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}	  
@@ -833,7 +823,6 @@ function youtubeAlbumJSON(youtubeJSONurl,renderYTAlbumEntries) {
 	});
 }
 function renderYTAlbumEntries(calledYTAlbumList) {
-	var retry = true;
 	if(localStorage[calledYTAlbumList]) {
 		mergeYTVideosAndAlbums();
 		var tempYTList = JSON.parse(localStorage[calledYTAlbumList]);
@@ -842,10 +831,9 @@ function renderYTAlbumEntries(calledYTAlbumList) {
 		  s += '<li><a class="albumLink" href="#" onclick="javascript:renderYTEntries(\'wvbs_video_YT_albums\',' + i + '); return false;" class="contentLink" data-entryid="' + i + '"><h3>' + v.title + '</h3><p>updated: <strong>' + v.date + '</strong></p><p class="ui-li-count">' + v.count + ' videos</p></a></li>';
 		});
 	  $("#ytArchiveAlbumsList").html(s);
-	} else if (retry) {
-		refreshVideoCache();
-		retry = false;
-		renderYTAlbumEntries(calledYTAlbumList);
+	} else if (retry == "true") {
+		refreshYTCache(renderYTAlbumEntries);
+		retry = "false";
 	} else {
 		$("#ytAlbumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}
@@ -934,7 +922,6 @@ function youtubeVideoJSON(youtubeJSONurl,entryIndex,callback) {
 	});
 }
 function renderYTEntries(calledYTVideoList,entryIndex) {
-	var retry = true;
 	if(localStorage[calledYTVideoList]) {
 		var tempAlbumList = JSON.parse(localStorage[calledYTVideoList]);
 		var tempVideoList = tempAlbumList[entryIndex].videos;
@@ -946,10 +933,6 @@ function renderYTEntries(calledYTVideoList,entryIndex) {
 			*/
 		});
 		$("#ytArchiveVideosList").html(s);
-	} else if (retry) {
-		refreshVideoCache();
-		retry = false;
-		renderYTEntries(calledYTVideoList,entryIndex);
 	} else {
 		  $("#ytAlbumArchiveStatus").html("Sorry, we are unable to get the Facebook Feed and there is no cache.");
 	}	  
