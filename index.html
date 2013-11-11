@@ -50,50 +50,9 @@
     <link rel="stylesheet" href="css/mobile.css" />
     <script src="js/wvbs-main.js"></script>
     <script async type="text/javascript" charset="utf-8">
-		var isMobile = {
-			Android: function() {
-				return navigator.userAgent.match(/Android/i) ? true : false;
-			},
-			BlackBerry: function() {
-				return navigator.userAgent.match(/BlackBerry/i) ? true : false;
-			},
-			iPhone: function() {
-				return navigator.userAgent.match(/iPhone|iPod/i) ? true : false;
-			},
-			iPad: function() {
-				return navigator.userAgent.match(/iPad/i) ? true : false;
-			},
-			Windows: function() {
-				return navigator.userAgent.match(/IEMobile/i) ? true : false;
-			},
-			any: function() {
-				return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
-			}
-		};
 		function mainPageReturn() {
 			window.location.hash = '#mainPage';
 		}
-/* TURNED OFF the mobile device specific messages for the App Code
-		$(document).ready(function() {
-		//$("#mainPage").live("pageinit", function() {
-			if ( isMobile.iPhone() ) {
-				//alert('iOS');
-				//window.location.hash = '#iPhoneDialog';
-				$("#iOSbutton").css('display','inline');
-				$("#iOSbutton").attr('href','#iPhoneDialog');
-			}
-			if ( isMobile.iPad() ) {
-				//window.location.hash = '#iPadDialog';
-				$("#iOSbutton").css('display','inline');
-				$("#iOSbutton").attr('href','#iPadDialog');
-			}
-			if ( isMobile.Android() ) {
-				//alert('Android')
-				//window.location.hash = '#androidDialog';
-				$("#androidButton").css('display','inline');
-			}
-		});
-*/		
       </script>
 	  <script async>		
 	  // Call onDeviceReady when Cordova is loaded.
@@ -132,37 +91,6 @@
 	  }
 
 	  </script>
-<!-- Following is code to be used for the GAPlugin
-	  <script type="text/javascript">
-          var gaPlugin;
-          function startGAPlugin() {
-              gaPlugin = window.plugins.gaPlugin;      
-              gaPlugin.init(nativePluginResultHandler,nativePluginErrorHandler, "UA-24957485-1", 10);
-          }
-          function nativePluginResultHandler (result) {
-              //alert('nativePluginResultHandler - '+result);
-              console.log('nativePluginResultHandler: '+result);
-          }
-          function nativePluginErrorHandler (error) {
-              //alert('nativePluginErrorHandler - '+error);
-              console.log('nativePluginErrorHandler: '+error);
-          }
-          function TrackPageView() {
-              gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Button", "Click", "event only", 1);
-          }
-          function VariableButtonClicked() {
-              gaPlugin.setVariable( nativePluginResultHandler, nativePluginErrorHandler, "favoriteColor", "Purple", 1);
-              gaPlugin.trackEvent( nativePluginResultHandler, nativePluginErrorHandler, "Button", "Click", "event with variable", 2);
-          }
-          function PageButtonClicked() {
-              gaPlugin.trackPage( nativePluginResultHandler, nativePluginErrorHandler, "some.url.com");
-          }
-          function goingAway() {
-              gaPlugin.exit(nativePluginResultHandler, nativePluginErrorHandler);
-          }
-		  //$('[data-role=page]').live('pageshow', TrackPageView);
-      </script>
--->
       <script async>	  	  
 	  function checkConnection() {
         var networkState = navigator.network.connection.type;
@@ -259,18 +187,6 @@
         ga_storage._setDomain('none');
         ga_storage._trackPageview('/index.html');
     </script>
-<!--Standard GA code for web browsers, coupled with jquerymobile pseudopage tracking at end of this file
-	<script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-24957485-1']);
-      _gaq.push(['_setDomainName', 'wvbs.org']);
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>    
--->    
     <style type="text/css">
     .new-badge:after {
         content: 'New';
@@ -300,8 +216,6 @@
   <div data-role="page" id="mainPage" data-title="World Video Bible School's Mobile App">
 	<div data-role="header" data-position="fixed" data-theme="a">
         <h1></h1>
-        <a id="iOSbutton" style="display:none;" class="ui-btn-left" href="#iPhoneDialog" data-role="button" data-icon="plus" data-theme="b">Add to Home Screen</a>
-        <a id="androidButton" style="display:none;" class="ui-btn-left" href="#androidDialog" data-role="button" data-icon="plus" data-theme="b">Get the WVBS Android App</a>
          <div data-role="controlgroup" data-type="horizontal" style="top:0px;position:absolute;float:right;z-index:10;display:inline;" align="right" class="ui-btn-right"> 
           <a id="newsButton" href="#" style="display:none;" onClick="javascript:openNewsBox();" data-role="button" data-rel="popup" data-position-to="#newsDIV" data-transition="slidedown" data-icon="alert" >News</a>
           <a href="javascript:onMenuShow();" data-role="button" data-icon="info">Menu</a>
@@ -805,22 +719,5 @@ box-shadow:         0px 0px 15px rgba(50, 50, 49, 1);
 	  }
   });
 </script>
-
-<!--Script below works to track jquerymobile pseudopages in web browser
-  <script>
-    $('[data-role=page]').live('pageshow', function (event, ui) {
-        try {
-          _gaq.push(['_setAccount', 'UA-24957485-1']);
-            hash = location.hash;
-            if (hash) {
-                _gaq.push(['_trackPageview', hash.substr(1)]);
-            } else {
-                _gaq.push(['_trackPageview']);
-            }
-        } catch(err) { 
-        }
-    });
-  </script>
--->  
 </body>
 </html>
