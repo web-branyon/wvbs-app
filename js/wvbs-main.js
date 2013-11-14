@@ -1,7 +1,10 @@
 //Title of the blog
 var TITLE = "WVBS App";
 //RSS url
-var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//www.wvbs.org/mobile/wvbs-app.rss%27";
+//var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//www.wvbs.org/mobile/wvbs-app.rss%27";
+//var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=xml";
+var rndTime = new Date().getTime();
+var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D'http%3A%2F%2Fwww.wvbs.org%2Fmobile%2Fwvbs-app.rss'&diagnostics=true&rnd="+rndTime;
 var infoRSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=json";
 //var vimeoInfo = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//vimeo.com/api/v2/wvbs/info.xml%27";
 
@@ -151,13 +154,19 @@ function wvbsNews(renderNewsEntries) {
               var itemsWeb = xmlWeb.find("news");
 			  $.each(itemsWeb, function(i, v) {
 				  entry = { 
+  					  pubDate:$(v).find("pubDate").text(),
 					  description:$(v).find("description").text(),
-				  };
+                  };
 				  entriesNews.push(entry);
 			  });
 			  //store entries
 			  localStorage["wvbs_news_entries"] = JSON.stringify(entriesNews);
 			  //
+              if (localStorage.wvbs_news_access < entriesNews[0].pubDate) {
+                  $('#newsButton').prepend('<span id="newsButtonBadge" class="new-badge"></span>');
+                  localStorage.wvbs_news_access = entriesNews[0].pubDate;
+              }
+              
 			  if (renderNewsEntries && typeof(renderNewsEntries) === "function") {
 				  renderNewsEntries(entriesNews);
 			  }
@@ -183,11 +192,11 @@ function renderNewsEntries(entriesNews) {
     entries = entriesNews;
     var s = '';
     $.each(entries, function(i, v) {
-        s += '<li data-entryid="'+i+'">' + v.description + '</li>';
+        s += '<li data-entryid="'+i+'">' + v.pubDate + ': ' + v.description + '</li>';
 		//console.log(entriesNews[i].description);
     });
     $('#newsMessages').html(s);
-	$("#newsDIV").css('display','block');
+	//$("#newsDIV").css('display','block');
 }
 function wvbsVideoCache(renderVideoCache)
 {
@@ -529,9 +538,17 @@ function renderWVBSEntries(calledWVBSList) {
 	if(localStorage[calledWVBSList]) {
 		var tempWVBSList = JSON.parse(localStorage[calledWVBSList])
 		var s = '';
-		$.each(tempWVBSList, function(i, v) {
-		  s += '<li><a href="#contentPage" class="contentLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')">' + v.title + '</a></li>';
-		});
+        if (calledWVBSList == "wvbs_product_special") {
+            console.log(calledWVBSList);
+            $.each(tempWVBSList, function(i, v) {
+                var specialPrice = getSpecialPrice(i);
+                s += '<li><a href="#contentPage" class="contentLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')"><h3>' + v.title + '</h3><p class="ui-li-count">' + specialPrice + '</p></a></li>';
+            });
+        } else {
+            $.each(tempWVBSList, function(i, v) {
+                s += '<li><a href="#contentPage" class="contentLink" data-entryid="'+i+'" onClick="setSelectedEntry('+i+')">' + v.title + '</a></li>';
+            });
+        }
 		$("#wvbsMoreFeed .ui-btn-text").text("More ...");	
 		$("#wvbslinksList").html(s);
 		localStorage["wvbs_entries"] = localStorage[calledWVBSList]
@@ -1152,6 +1169,9 @@ $("#webSitesArchive").live("pageshow", function(prepage) {
 	//webSites(renderWebEntries);
 	renderWebEntries();
 });
+$("#newsDialog").live("pageshow", function(prepage) {
+	localStorage.wvbs_news_access = getCurrentDate();
+});
 function getCurrentDate() {
   var currentDate = new Date();
   var dd = currentDate.getDate();
@@ -1160,3 +1180,11 @@ function getCurrentDate() {
   if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm} currentDate = mm+'/'+dd+'/'+yyyy;
   return currentDate;
 }
+function getSpecialPrice(itemIndex) {
+    var items = JSON.parse(localStorage.wvbs_product_special);
+    var d = document.createElement('div');
+    d.innerHTML = items[itemIndex].description;
+    var pricing = d.getElementsByClassName("price");
+    return pricing[1].innerHTML;
+}
+    

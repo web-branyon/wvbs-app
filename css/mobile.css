@@ -150,3 +150,25 @@ div.bground {
   text-align:center; 
   color:red;
 }
+.new-badge:after {
+    content: 'New';
+    position: absolute;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    width: 30px;
+    height: 30px;
+    top: 30%;
+    left: -10px;
+    margin-left: -10px;
+    margin-top:  -18px;
+    background-color: red;
+    background-image: -webkit-linear-gradient(top, #f7847e 0%,#f9363d 49%,#e8100e 50%,#c30910 100%);
+    color: white;
+    text-align:center;
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 27px;
+    border: black;
+    border-radius: 30px;
+    border: solid 2px white;
+    z-index: 2;
+}
