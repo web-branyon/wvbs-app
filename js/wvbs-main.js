@@ -4,8 +4,8 @@ var TITLE = "WVBS App";
 //var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//www.wvbs.org/mobile/wvbs-app.rss%27";
 //var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=xml";
 var rndTime = new Date().getTime();
-var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D'http%3A%2F%2Fwww.wvbs.org%2Fmobile%2Fwvbs-app.rss'&diagnostics=true&rnd="+rndTime;
-var infoRSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.org/mobile/wvbs-app.rss'&format=json";
+var RSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D'http%3A%2F%2Fwww.wvbs.net%2Fwvbs-app.rss'&diagnostics=true&rnd="+rndTime;
+var infoRSS = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url='http://www.wvbs.net/wvbs-app.rss'&format=json";
 //var vimeoInfo = "http://query.yahooapis.com/v1/public/yql?q=SELECT%20*%20FROM%20xml%20WHERE%20url%3D%27http%3A//vimeo.com/api/v2/wvbs/info.xml%27";
 
 //Stores entries
@@ -1103,18 +1103,32 @@ $("#contentPage").live("pageshow", function(prepage) {
 	contentHTML = contentHTML.replace('height="75"','height="150"');
 	contentHTML = contentHTML.replace('width="75"','width="150" style="padding:0px 20px 20px 0px;"');
 
-	//Set the email link information
-	var emailLink = 'mailto:?subject=Checkout this material from WVBS &body='+ entryTitle + '%3A ' + entries[selectedEntry].link;
+//Set the email link information
+	var emailSubject = '?subject=Checkout this material from WVBS &body='+ entryTitle + '%3A ' + entries[selectedEntry].link;
 	var emailText =  'Email: ' + entryTitle;
-	$("#emailContainer").find("a").attr('href',emailLink);
+    $("#emailContainer").find("a").attr('href','#');
+    $("#emailContainer").find("a").on("click", function (e) {
+      if (document.getElementById("emailAddress").value){
+        var emailAddress = 'mailto:' + document.getElementById("emailAddress").value;
+        emailLink = emailAddress + emailSubject;
+      }
+      else {
+        emailLink = 'mailto:' + emailSubject;
+      }
+      window.open(emailLink, "_system", "location=yes");
+    });
 	$("#emailContainer").find("a span span").text(emailText);
 	//$("#entryText",this).html(contentHTML).trigger("create");
 	var twitterLink = 'https://twitter.com/intent/tweet?text='+ entryTitle + '&url=' + entries[selectedEntry].link;
-	$("#twitterContainer").find("a").attr('href',twitterLink);
-	//$("#emailContainer").find("a span span").text(emailText);
+	$("#twitterContainer").find("a").attr('href','#');
+    $("#twitterContainer").find("a").on("click", function (e) {
+        window.open(twitterLink, "_system", "location=yes");
+    });
 	var facebookLink = 'http://www.facebook.com/sharer.php?u=' + entries[selectedEntry].link;
-	$("#facebookContainer").find("a").attr('href',facebookLink);
-	//$("#emailContainer").find("a span span").text(emailText);
+    $("#facebookContainer").find("a").attr('href','#');
+    $("#facebookContainer").find("a").on("click", function (e) {
+        window.open(facebookLink, "_system", "location=yes");
+    });
 
 	$("#entryText",this).html(contentHTML).trigger("create");
 	/*
