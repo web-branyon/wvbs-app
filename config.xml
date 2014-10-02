@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="org.wvbs" versionCode="4" version="2.1.1">
+	<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="org.wvbs" versionCode="5" version="2.1.2">
 		<name>WVBS</name>
 		<description>World Video Bible School offers a web app to access our latest projects, see our newest products, find our current specials, and track our Facebook posts for all of our pages.</description>
 		<author href="http://wvbs.org" email="biblestudy@wvbs.org">World Video Bible School</author>
-		<preference name="phonegap-version" value="3.0.0" />
+		<preference name="phonegap-version" value="3.5.0" />
 		<preference name="orientation" value="default" />
 		<preference name="target-device" value="universal" />
 		<preference name="fullscreen" value="false" />
